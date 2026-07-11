@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SisGera — Protótipo: Nova Ocorrência</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --red:       #c53030; --red-dark: #9b2c2c; --red-light: #fff5f5;
+    --green:     #16a34a; --blue: #2563eb;
+    --orange:    #ea580c; --amber: #d97706; --purple: #7c3aed;
+    --gray-50:   #f8fafc; --gray-100: #f1f5f9; --gray-200: #e2e8f0;
+    --gray-400:  #94a3b8; --gray-600: #475569; --gray-800: #1e293b;
+    --text:      #1e293b; --border: #e2e8f0;
+    --radius:    8px; --shadow: 0 4px 16px rgba(0,0,0,.10);
+  }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--gray-100); color: var(--text); min-height: 100vh; }
+
+  /* TOPBAR */
+  .topbar { background: var(--red); color:#fff; display:flex; align-items:center; justify-content:space-between; padding:0 32px; height:60px; box-shadow:0 2px 8px rgba(0,0,0,.2); position:sticky; top:0; z-index:100; }
+  .topbar-brand { display:flex; align-items:center; gap:12px; font-size:20px; font-weight:700; }
+  .topbar-badge { background:rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.3); border-radius:20px; padding:3px 12px; font-size:12px; font-weight:600; letter-spacing:.5px; }
+
+  /* CONTAINER & STEPPER */
+  .container { max-width:980px; margin:32px auto; padding:0 16px 64px; }
+  .stepper-wrap { background:#fff; border-radius:12px; box-shadow:var(--shadow); padding:24px 32px; margin-bottom:24px; }
+  .stepper { display:flex; align-items:flex-start; justify-content:space-between; position:relative; }
+  .stepper::before { content:''; position:absolute; top:20px; left:0; right:0; height:2px; background:var(--border); z-index:0; }
+  .step { display:flex; flex-direction:column; align-items:center; position:relative; z-index:1; flex:1; }
+  .step-num { width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:14px; background:#fff; border:2px solid var(--border); color:var(--gray-400); transition:all .3s; }
+  .step.active .step-num  { border-color:var(--red); color:var(--red); box-shadow:0 0 0 4px rgba(197,48,48,.12); }
+  .step.done   .step-num  { background:var(--red); border-color:var(--red); color:#fff; }
+  .step-label { font-size:11px; font-weight:600; color:var(--gray-400); margin-top:8px; text-align:center; text-transform:uppercase; letter-spacing:.4px; }
+  .step.active .step-label { color:var(--red); }
+  .step.done   .step-label { color:var(--gray-600); }
+
+  /* CARD */
+  .card { background:#fff; border-radius:12px; box-shadow:var(--shadow); overflow:hidden; margin-bottom:24px; }
+  .card-header { padding:20px 28px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:12px; }
+  .card-icon { width:36px; height:36px; border-radius:8px; background:var(--red-light); color:var(--red); display:flex; align-items:center; justify-content:center; font-size:16px; }
+  .card-header h2 { font-size:16px; font-weight:700; }
+  .card-header p  { font-size:13px; color:var(--gray-400); margin-top:2px; }
+  .card-body { padding:28px; }
+
+  /* GRID */
+  .grid   { display:grid; gap:16px; }
+  .grid-2 { grid-template-columns:1fr 1fr; }
+  .grid-3 { grid-template-columns:1fr 1fr 1fr; }
+  .col-2  { grid-column:span 2; }
+  .col-3  { grid-column:span 3; }
+
+  /* FORM GROUP */
+  .fg { display:flex; flex-direction:column; gap:6px; }
+  .fg label { font-size:12px; font-weight:600; color:var(--gray-600); text-transform:uppercase; letter-spacing:.4px; }
+  .fg input, .fg select, .fg textarea { border:1.5px solid var(--border); border-radius:var(--radius); padding:10px 12px; font-size:14px; font-family:inherit; color:var(--text); background:#fff; transition:border-color .2s, box-shadow .2s; outline:none; }
+  .fg input:focus, .fg select:focus, .fg textarea:focus { border-color:var(--red); box-shadow:0 0 0 3px rgba(197,48,48,.10); }
+  .fg textarea { resize:vertical; min-height:80px; }
+  .fg .hint { font-size:11px; color:var(--gray-400); }
+
+  /* TIPO SELECTOR */
+  .tipo-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  .tipo-card { border:2px solid var(--border); border-radius:12px; padding:24px 16px; text-align:center; cursor:pointer; transition:all .2s; background:#fff; }
+  .tipo-card:hover { border-color:var(--red); background:var(--red-light); }
+  .tipo-card.selected { border-color:var(--red); background:var(--red-light); box-shadow:0 0 0 4px rgba(197,48,48,.12); }
+  .tipo-card .tipo-icon { font-size:36px; margin-bottom:12px; display:block; }
+  .tipo-card .tipo-name { font-size:15px; font-weight:700; }
+  .tipo-card .tipo-desc { font-size:12px; color:var(--gray-400); margin-top:4px; }
+  .tipo-card.selected .tipo-name, .tipo-card.selected .tipo-desc { color:var(--red-dark); }
+
+  /* CHIPS */
+  .chip-row { display:flex; gap:8px; flex-wrap:wrap; }
+  .chip { border:1.5px solid var(--border); border-radius:20px; padding:6px 14px; font-size:12px; font-weight:600; cursor:pointer; transition:all .15s; background:#fff; color:var(--gray-600); user-select:none; }
+  .chip:hover { border-color:var(--red); color:var(--red); }
+  .chip.selected { background:var(--red); border-color:var(--red); color:#fff; }
+  .chip.tag-chip { border-radius:6px; }
+  .chip.tag-chip.selected { background:var(--red); }
+  .chip.tag-chip.proc.selected { background:var(--blue); border-color:var(--blue); }
+  .chip.tag-chip.emerg.selected { background:var(--purple); border-color:var(--purple); }
+
+  /* BOTÕES */
+  .btn { display:inline-flex; align-items:center; gap:8px; padding:10px 20px; border-radius:var(--radius); font-size:14px; font-weight:600; cursor:pointer; border:none; transition:all .2s; }
+  .btn-primary { background:var(--red); color:#fff; }
+  .btn-primary:hover { background:var(--red-dark); }
+  .btn-outline { background:#fff; color:var(--gray-600); border:1.5px solid var(--border); }
+  .btn-outline:hover { border-color:var(--red); color:var(--red); }
+  .btn-green  { background:var(--green); color:#fff; }
+  .btn-green:hover { background:#15803d; }
+  .btn-orange { background:var(--orange); color:#fff; }
+  .btn-orange:hover { background:#c2410c; }
+  .btn-ghost  { background:transparent; color:var(--gray-400); border:1.5px dashed var(--border); }
+  .btn-ghost:hover { background:var(--gray-100); border-color:var(--gray-400); color:var(--gray-800); }
+  .btn-danger { background:#fff; color:#dc2626; border:1.5px solid #fecaca; }
+  .btn-danger:hover { background:#fef2f2; }
+  .btn-sm { padding:7px 14px; font-size:12px; }
+
+  /* NAVEGAÇÃO DO FORM */
+  .form-nav { display:flex; justify-content:space-between; align-items:center; padding:20px 28px; border-top:1px solid var(--border); background:var(--gray-50); }
+  .form-nav-right { display:flex; gap:12px; }
+  .step-indicator { font-size:13px; color:var(--gray-400); font-weight:600; }
+
+  /* SECTION DIVIDER */
+  .sdiv { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.6px; color:var(--gray-400); border-bottom:1px solid var(--border); padding-bottom:8px; margin:20px 0 16px; display:flex; align-items:center; gap:8px; }
+
+  /* TOGGLE SWITCH */
+  .toggle-wrap { display:flex; align-items:center; gap:12px; padding:16px 20px; background:var(--gray-50); border-radius:10px; border:1.5px solid var(--border); margin-bottom:20px; cursor:pointer; user-select:none; }
+  .toggle-wrap:hover { border-color:var(--orange); }
+  .toggle-wrap.active-mode { border-color:var(--orange); background:#fff7ed; }
+  .toggle { position:relative; width:44px; height:24px; flex-shrink:0; }
+  .toggle input { opacity:0; width:0; height:0; }
+  .toggle-slider { position:absolute; inset:0; background:var(--border); border-radius:24px; transition:.3s; cursor:pointer; }
+  .toggle-slider::before { content:''; position:absolute; width:18px; height:18px; left:3px; bottom:3px; background:#fff; border-radius:50%; transition:.3s; box-shadow:0 1px 3px rgba(0,0,0,.2); }
+  input:checked + .toggle-slider { background:var(--orange); }
+  input:checked + .toggle-slider::before { transform:translateX(20px); }
+  .toggle-text strong { font-size:14px; font-weight:700; color:var(--gray-800); }
+  .toggle-text p { font-size:12px; color:var(--gray-400); margin-top:2px; }
+  .toggle-wrap.active-mode .toggle-text strong { color:var(--orange); }
+
+  /* ══ VÍTIMA NORMAL (sem veículo) ══ */
+  .vitima-wrap { border:1.5px solid var(--border); border-radius:10px; overflow:hidden; margin-bottom:16px; }
+  .vitima-wrap:focus-within { border-color:var(--red); }
+  .vitima-header { background:var(--gray-50); padding:12px 20px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border); cursor:pointer; }
+  .vitima-header-left { display:flex; align-items:center; gap:10px; }
+  .vitima-badge { width:28px; height:28px; border-radius:50%; background:var(--red); color:#fff; font-size:12px; font-weight:700; display:flex; align-items:center; justify-content:center; }
+  .vitima-title { font-size:14px; font-weight:600; }
+  .vitima-body { padding:20px; }
+  .vitima-body.collapsed { display:none; }
+
+  /* ══ VEÍCULO ══ */
+  .veiculo-wrap { border:2px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:20px; transition:border-color .2s; }
+  .veiculo-header { padding:16px 20px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; }
+  .veiculo-header:hover { background:var(--gray-50); }
+  .veiculo-type-icon { font-size:28px; margin-right:12px; }
+  .veiculo-info strong { font-size:15px; font-weight:700; }
+  .veiculo-info span { font-size:12px; color:var(--gray-400); display:block; margin-top:2px; }
+  .veiculo-badge { display:inline-flex; align-items:center; gap:6px; font-size:11px; font-weight:700; padding:3px 10px; border-radius:20px; }
+  .veiculo-body { padding:0 20px 20px; border-top:1px solid var(--border); background:var(--gray-50); }
+  .veiculo-body.collapsed { display:none; }
+  .veiculo-vitima-wrap { border:1.5px solid var(--border); border-radius:8px; overflow:hidden; margin-bottom:12px; background:#fff; }
+  .veiculo-vitima-header { background:#fff; padding:10px 16px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; border-bottom:1px solid var(--border); }
+  .veiculo-vitima-body { padding:16px; }
+  .veiculo-vitima-body.collapsed { display:none; }
+
+  /* Cores de veículos */
+  .veiculo-wrap[data-color="red"]    { border-color:#fca5a5; }  .veiculo-wrap[data-color="red"] .veiculo-header    { background:#fef2f2; }
+  .veiculo-wrap[data-color="blue"]   { border-color:#93c5fd; }  .veiculo-wrap[data-color="blue"] .veiculo-header   { background:#eff6ff; }
+  .veiculo-wrap[data-color="green"]  { border-color:#86efac; }  .veiculo-wrap[data-color="green"] .veiculo-header  { background:#f0fdf4; }
+  .veiculo-wrap[data-color="orange"] { border-color:#fdba74; }  .veiculo-wrap[data-color="orange"] .veiculo-header { background:#fff7ed; }
+  .veiculo-wrap[data-color="purple"] { border-color:#c4b5fd; }  .veiculo-wrap[data-color="purple"] .veiculo-header { background:#f5f3ff; }
+
+  /* SINAIS VITAIS */
+  .sinais-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .sinal-box { background:var(--gray-50); border:1px solid var(--border); border-radius:8px; padding:10px; text-align:center; }
+  .sinal-box label { font-size:10px; font-weight:700; color:var(--gray-400); text-transform:uppercase; letter-spacing:.4px; display:block; margin-bottom:4px; }
+  .sinal-box input { width:100%; border:none; background:transparent; text-align:center; font-size:20px; font-weight:700; color:var(--red); outline:none; font-family:inherit; }
+  .sinal-box .unit { font-size:10px; color:var(--gray-400); }
+  .pa-wrap { display:flex; align-items:center; gap:2px; justify-content:center; }
+  .pa-wrap input { font-size:16px; width:40px; }
+  .pa-sep { font-size:18px; font-weight:700; color:var(--gray-400); }
+
+  /* ADD BUTTON */
+  .add-btn { width:100%; padding:14px; border:2px dashed var(--border); border-radius:10px; background:transparent; cursor:pointer; font-size:13px; font-weight:600; color:var(--gray-400); transition:all .2s; display:flex; align-items:center; justify-content:center; gap:8px; margin-top:12px; }
+  .add-btn:hover { border-color:var(--red); color:var(--red); background:var(--red-light); }
+  .add-veiculo-btn:hover { border-color:var(--orange); color:var(--orange); background:#fff7ed; }
+
+  /* BADGES DE RESUMO */
+  .badge { display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:20px; font-size:11px; font-weight:700; }
+  .badge-orange { background:#fed7aa; color:#c2410c; }
+  .badge-red    { background:#fecaca; color:#dc2626; }
+  .badge-blue   { background:#bfdbfe; color:#1d4ed8; }
+  .badge-green  { background:#bbf7d0; color:#15803d; }
+
+  /* ALERT */
+  .alert { padding:12px 16px; border-radius:8px; font-size:13px; font-weight:500; margin-bottom:16px; display:flex; align-items:flex-start; gap:10px; }
+  .alert-info   { background:#eff6ff; color:#1e40af; border:1px solid #bfdbfe; }
+  .alert-warn   { background:#fffbeb; color:#92400e; border:1px solid #fde68a; }
+  .alert-orange { background:#fff7ed; color:#c2410c; border:1px solid #fdba74; }
+
+  /* RESUMO */
+  .resumo-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px; }
+  .resumo-box { background:var(--gray-50); border:1px solid var(--border); border-radius:8px; padding:12px 16px; }
+  .resumo-label { font-size:10px; font-weight:700; text-transform:uppercase; color:var(--gray-400); letter-spacing:.4px; margin-bottom:4px; }
+  .resumo-value { font-size:14px; font-weight:600; }
+
+  /* CEP */
+  .cep-row { display:flex; gap:8px; align-items:flex-end; }
+  .cep-row .fg { flex:1; }
+
+  @media (max-width:640px) {
+    .grid-2, .grid-3 { grid-template-columns:1fr; }
+    .col-2, .col-3 { grid-column:span 1; }
+    .tipo-grid { grid-template-columns:1fr; }
+    .sinais-grid { grid-template-columns:1fr 1fr; }
+    .container { padding:0 8px 48px; }
+  }
+  @media print {
+    .topbar, .form-nav, .add-btn, .btn, .stepper-wrap { display:none !important; }
+    .vitima-body.collapsed, .veiculo-body.collapsed, .veiculo-vitima-body.collapsed, .vitima-body { display:block !important; }
+    body { background:#fff; }
+    .card { box-shadow:none; border:1px solid #ccc; }
+  }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-brand">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+      <path d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.35C17.25 22.15 21 17.25 21 12V7L12 2z"/>
+    </svg>
+    SisGera
+  </div>
+  <span class="topbar-badge">🧪 PROTÓTIPO v2 — Agrupamento por Veículo</span>
+  <button class="btn btn-outline btn-sm" onclick="window.print()" style="color:#fff;border-color:rgba(255,255,255,.4)">🖨️ Imprimir</button>
+</header>
+
+<div class="container">
+
+  <!-- STEPPER -->
+  <div class="stepper-wrap">
+    <div class="stepper" id="stepper">
+      <div class="step active" data-step="1"><div class="step-num">1</div><div class="step-label">Tipo</div></div>
+      <div class="step" data-step="2"><div class="step-num">2</div><div class="step-label">Atendimento</div></div>
+      <div class="step" data-step="3"><div class="step-num">3</div><div class="step-label">Vítimas</div></div>
+      <div class="step" data-step="4"><div class="step-num">4</div><div class="step-label">Avaliação Clínica</div></div>
+      <div class="step" data-step="5"><div class="step-num">5</div><div class="step-label">Relato Final</div></div>
+    </div>
+  </div>
+
+  <!-- ══ PASSO 1 — TIPO ══ -->
+  <div id="step-1" class="step-content">
+    <div class="card">
+      <div class="card-header"><div class="card-icon">🚒</div><div><h2>Tipo de Ocorrência</h2><p>Define os campos e o fluxo do formulário</p></div></div>
+      <div class="card-body">
+        <div class="alert alert-info" style="margin-bottom:20px">
+          ℹ️ <strong>IdTipoOcorrencia</strong> — 1=Simplificado · 2=Incêndio · 3=Salvamento/Resgate<br>
+          <small style="display:block;margin-top:6px;line-height:1.8">
+            📋 <strong>Simplificado:</strong> exige sub-tipo (IdTipoOcorrenciaSimplificado) · vítimas opcionais · sem avaliação clínica obrigatória<br>
+            🔥 <strong>Incêndio:</strong> vítimas opcionais · avaliação clínica se houver feridos<br>
+            🚑 <strong>Salvamento/Resgate:</strong> vítimas obrigatórias · avaliação clínica completa obrigatória
+          </small>
+        </div>
+        <div class="tipo-grid">
+          <div class="tipo-card" onclick="selectTipo(this,'simplificado')">
+            <span class="tipo-icon">📋</span>
+            <div class="tipo-name">Simplificado</div>
+            <div class="tipo-desc">Atendimentos sem vítima grave.<br><strong style="color:#c53030;font-size:11px">↳ Exige sub-tipo · Vítimas opcionais · Sem avaliação clínica</strong></div>
+          </div>
+          <div class="tipo-card" onclick="selectTipo(this,'incendio')">
+            <span class="tipo-icon">🔥</span>
+            <div class="tipo-name">Incêndio</div>
+            <div class="tipo-desc">Urbanos, florestais, veiculares.<br><strong style="color:#92400e;font-size:11px">↳ Vítimas opcionais · Avaliação clínica se houver feridos</strong></div>
+          </div>
+          <div class="tipo-card" onclick="selectTipo(this,'salvamento')">
+            <span class="tipo-icon">🚑</span>
+            <div class="tipo-name">Salvamento / Resgate</div>
+            <div class="tipo-desc">APH, traumas, resgate em altura ou água.<br><strong style="color:#c53030;font-size:11px">↳ Vítimas obrigatórias · Avaliação clínica completa</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="form-nav"><span class="step-indicator">Passo 1 de 5</span><div class="form-nav-right"><button class="btn btn-primary" onclick="goTo(2)">Próximo →</button></div></div>
+    </div>
+  </div>
+
+  <!-- ══ PASSO 2 — ATENDIMENTO ══ -->
+  <div id="step-2" class="step-content" style="display:none">
+    <div class="card">
+      <div class="card-header"><div class="card-icon">📍</div><div><h2>Dados do Atendimento</h2><p>Tabela: <code>Ocorrencia</code></p></div></div>
+      <div class="card-body">
+        <div class="sdiv">📅 Horários — <small>DataOcorrencia · HoraTransmissao · HoraChegadaLocal · HoraChegadaHospital</small></div>
+        <div class="grid grid-2" style="margin-bottom:20px">
+          <div class="fg"><label>Data da Ocorrência *</label><input type="date" id="data_ocorrencia" /></div>
+          <div class="fg"><label>Hora Transmissão</label><input type="time" id="hora_transmissao" /></div>
+          <div class="fg"><label>Hora Chegada ao Local</label><input type="time" id="hora_chegada_local" /></div>
+          <div class="fg"><label>Hora Chegada ao Hospital</label><input type="time" id="hora_chegada_hospital" /></div>
+        </div>
+
+        <div class="sdiv">📞 Origem do Chamado — <small>IdTipoOrigemChamado</small></div>
+        <div class="chip-row" style="margin-bottom:20px" id="origem-chips">
+          <div class="chip" onclick="selectChip(this,'origem')">🚨 193</div>
+          <div class="chip" onclick="selectChip(this,'origem')">📻 Rádio</div>
+          <div class="chip" onclick="selectChip(this,'origem')">🌐 App/Online</div>
+          <div class="chip" onclick="selectChip(this,'origem')">👤 Presencial</div>
+          <div class="chip" onclick="selectChip(this,'origem')">📋 Outro</div>
+        </div>
+
+        <!-- SUB-TIPO — apenas para Simplificado -->
+        <div id="subtipo-section" style="display:none;margin-bottom:20px">
+          <div class="sdiv">📋 Sub-tipo da Ocorrência — <small>IdTipoOcorrenciaSimplificado · OcorrenciaSimplificadoOutro</small> <span class="badge badge-red" style="margin-left:8px">Obrigatório para Simplificado</span></div>
+          <div class="alert alert-info" style="margin-bottom:12px">ℹ️ Este campo aparece <strong>apenas no tipo Simplificado</strong>. Para Incêndio e Salvamento não se aplica.</div>
+          <div class="chip-row" id="subtipo-chips" style="flex-wrap:wrap;margin-bottom:8px">
+            <div class="chip" onclick="selectSubtipo(this,'vistoria')">Vistoria e inspeção</div>
+            <div class="chip" onclick="selectSubtipo(this,'arvore')">Corte de árvore</div>
+            <div class="chip" onclick="selectSubtipo(this,'via')">Desobstrução de via</div>
+            <div class="chip" onclick="selectSubtipo(this,'defesa')">Eventos da defesa civil</div>
+            <div class="chip" onclick="selectSubtipo(this,'intra')">Transporte intra-hospitalar</div>
+            <div class="chip" onclick="selectSubtipo(this,'pub')">Cobertura em evento (público)</div>
+            <div class="chip" onclick="selectSubtipo(this,'priv')">Cobertura em evento (privado)</div>
+            <div class="chip" onclick="selectSubtipo(this,'domicilio')">Transporte para o domicílio</div>
+            <div class="chip" onclick="selectSubtipo(this,'outro')">Outro</div>
+          </div>
+          <div id="subtipo-outro" style="display:none;margin-top:8px">
+            <div class="fg"><label>Descreva o tipo *</label><input type="text" id="subtipo_outro_texto" placeholder="Ex: Resgate de animal, assistência comunitária..." /></div>
+          </div>
+        </div>
+
+        <div class="sdiv">📍 Endereço — <small>Cep · IdUf · Endereco · Numero · Complemento · Bairro · Cidade · PontoReferencia</small></div>
+        <div class="grid grid-2" style="margin-bottom:20px">
+          <div class="fg">
+            <label>CEP</label>
+            <div class="cep-row">
+              <div class="fg" style="gap:0"><input type="text" id="cep" placeholder="00000-000" maxlength="9" oninput="maskCep(this)" onblur="buscarCep()" /></div>
+              <button class="btn btn-outline btn-sm" onclick="buscarCep()">🔍</button>
+            </div>
+            <span class="hint" id="cep-status"></span>
+          </div>
+          <div class="fg"><label>UF</label>
+            <select id="uf">
+              <option value="">—</option>
+              <option>AC</option><option>AL</option><option>AP</option><option>AM</option><option>BA</option><option>CE</option>
+              <option>DF</option><option>ES</option><option>GO</option><option>MA</option><option>MT</option><option>MS</option>
+              <option>MG</option><option>PA</option><option>PB</option><option>PR</option><option>PE</option><option>PI</option>
+              <option>RJ</option><option>RN</option><option>RS</option><option>RO</option><option>RR</option><option>SC</option>
+              <option>SP</option><option>SE</option><option>TO</option>
+            </select>
+          </div>
+          <div class="fg col-2"><label>Endereço</label><input type="text" id="endereco" /></div>
+          <div class="fg"><label>Número</label><input type="number" id="numero" /></div>
+          <div class="fg"><label>Complemento</label><input type="text" id="complemento" maxlength="25" placeholder="Apto, bloco..." /></div>
+          <div class="fg"><label>Bairro</label><input type="text" id="bairro" /></div>
+          <div class="fg"><label>Cidade</label><input type="text" id="cidade" /></div>
+          <div class="fg col-2"><label>Ponto de Referência</label><input type="text" id="ponto_referencia" /></div>
+        </div>
+
+        <div class="sdiv">🚑 Transporte e Destino — <small>IdTipoTransporte · Destino</small></div>
+        <div class="grid grid-2">
+          <div class="fg"><label>Tipo de Transporte *</label>
+            <div class="chip-row" id="transporte-chips">
+              <div class="chip" onclick="selectChip(this,'transporte')">🚒 VTR-ASB</div>
+              <div class="chip" onclick="selectChip(this,'transporte')">🚒 VTR-ABS</div>
+              <div class="chip" onclick="selectChip(this,'transporte')">🚑 SAMU</div>
+              <div class="chip" onclick="selectChip(this,'transporte')">🚁 Aéreo</div>
+              <div class="chip" onclick="selectChip(this,'transporte')">🚗 Outros</div>
+            </div>
+          </div>
+          <div class="fg"><label>Destino</label><input type="text" id="destino" placeholder="Ex: UPA Centro..." /></div>
+        </div>
+      </div>
+      <div class="form-nav"><span class="step-indicator">Passo 2 de 5</span><div class="form-nav-right"><button class="btn btn-outline" onclick="goTo(1)">← Anterior</button><button class="btn btn-primary" onclick="goTo(3)">Próximo →</button></div></div>
+    </div>
+  </div>
+
+  <!-- ══ PASSO 3 — VÍTIMAS ══ -->
+  <div id="step-3" class="step-content" style="display:none">
+    <div class="card">
+      <div class="card-header"><div class="card-icon">👤</div><div><h2>Vítimas</h2><p>Tabela: <code>Vitima</code> — 1 Ocorrência → N Vítimas</p></div></div>
+      <div class="card-body">
+
+        <!-- TOGGLE MODO VEICULAR -->
+        <div class="toggle-wrap" id="toggle-veiculo-wrap" onclick="toggleModoVeiculo()">
+          <label class="toggle" onclick="event.stopPropagation()">
+            <input type="checkbox" id="toggle-veiculo" onchange="toggleModoVeiculo()" />
+            <span class="toggle-slider"></span>
+          </label>
+          <div class="toggle-text">
+            <strong>🚗 Agrupar vítimas por veículo</strong>
+            <p>Ative para acidente de trânsito: organize vítimas por carro, ônibus, moto, etc.</p>
+          </div>
+          <span class="badge badge-orange" id="modo-badge" style="display:none">Modo Veicular</span>
+        </div>
+
+        <!-- MODO NORMAL — lista simples de vítimas -->
+        <div id="modo-normal">
+          <div class="alert alert-info" style="margin-bottom:16px">
+            🗂️ Campos: <strong>Cpf · Nome · NomeSocial · DataNascimento · Telefone · IdGenero · NomeMae</strong>
+          </div>
+          <div id="vitimas-container"></div>
+          <button class="add-btn" onclick="addVitima()">+ Adicionar Vítima</button>
+        </div>
+
+        <!-- MODO VEICULAR — agrupado por veículo -->
+        <div id="modo-veiculo" style="display:none">
+          <div class="alert alert-orange" style="margin-bottom:16px">
+            🚗 <strong>Modo Acidente Veicular</strong> — adicione cada veículo envolvido e cadastre as vítimas de cada um.
+            <br><small style="display:block;margin-top:4px">💡 Proposta de nova tabela: <code>VeiculoOcorrencia</code> → <code>Vitima</code> (ainda não implementado no banco)</small>
+          </div>
+          <div id="veiculos-container"></div>
+          <button class="add-btn add-veiculo-btn" onclick="addVeiculo()">🚗 Adicionar Veículo</button>
+        </div>
+
+      </div>
+      <div class="form-nav"><span class="step-indicator">Passo 3 de 5</span><div class="form-nav-right"><button class="btn btn-outline" onclick="goTo(2)">← Anterior</button><button class="btn btn-primary" onclick="goTo(4)">Próximo →</button></div></div>
+    </div>
+  </div>
+
+  <!-- ══ PASSO 4 — AVALIAÇÃO CLÍNICA ══ -->
+  <div id="step-4" class="step-content" style="display:none">
+    <div class="card">
+      <div class="card-header"><div class="card-icon">🏥</div><div><h2>Avaliação Clínica</h2><p>Tabela: <code>AvaliacaoClinica</code> — 1 por vítima + tabelas N:N</p></div></div>
+      <div class="card-body">
+        <div class="alert alert-info" style="margin-bottom:20px">
+          🗂️ Sinais vitais: <strong>PressaoSistolica · PressaoDiastolica · Pulso · Respiracao · Temperatura · Saturacao · SaturacaoOxigenio · idAberturaOcular · idRespostaVerbal · idRespostaMotora</strong>
+          <br>Tags N:N: <strong>TraumaAvaliacaoClinica · ProcedimentoAvaliacaoClinica · EmergenciaAvaliacaoClinica</strong>
+        </div>
+        <div id="av-tabs" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px"></div>
+        <div id="av-container"></div>
+        <div id="av-empty" class="alert alert-warn" style="display:none">⚠️ Nenhuma vítima cadastrada no Passo 3. Volte e adicione ao menos uma vítima.</div>
+      </div>
+      <div class="form-nav"><span class="step-indicator">Passo 4 de 5</span><div class="form-nav-right"><button class="btn btn-outline" onclick="goTo(3)">← Anterior</button><button class="btn btn-primary" onclick="goTo(5)">Próximo →</button></div></div>
+    </div>
+  </div>
+
+  <!-- ══ PASSO 5 — RELATO FINAL ══ -->
+  <div id="step-5" class="step-content" style="display:none">
+    <div class="card">
+      <div class="card-header"><div class="card-icon">📝</div><div><h2>Relato Final e Confirmação</h2><p>Campos: <code>RelatoFinal · TermoRecusa · EquipePlantaoOcorrencia · FotoOcorrencia</code></p></div></div>
+      <div class="card-body">
+        <div class="sdiv">📋 Resumo</div>
+        <div class="resumo-grid" style="margin-bottom:24px">
+          <div class="resumo-box"><div class="resumo-label">Tipo</div><div class="resumo-value" id="resumo-tipo">—</div></div>
+          <div class="resumo-box"><div class="resumo-label">Data</div><div class="resumo-value" id="resumo-data">—</div></div>
+          <div class="resumo-box"><div class="resumo-label">Vítimas</div><div class="resumo-value" id="resumo-vitimas">—</div></div>
+          <div class="resumo-box"><div class="resumo-label">Veículos</div><div class="resumo-value" id="resumo-veiculos">—</div></div>
+          <div class="resumo-box col-2"><div class="resumo-label">Endereço</div><div class="resumo-value" id="resumo-endereco">—</div></div>
+        </div>
+
+        <div class="sdiv">📝 Relato — <small>RelatoFinal</small></div>
+        <div class="fg" style="margin-bottom:20px"><textarea id="relato_final" rows="5" placeholder="Descreva cronologicamente: chegada ao local, estado das vítimas, condutas, destino..."></textarea></div>
+
+        <div class="sdiv">⚠️ Termo de Recusa — <small>TermoRecusa</small></div>
+        <div class="fg" style="margin-bottom:20px"><textarea id="termo_recusa" rows="2" placeholder="Preencher apenas se a vítima/responsável recusou o atendimento..."></textarea></div>
+
+        <div class="sdiv">👥 Equipe de Plantão — <small>EquipePlantaoOcorrencia (N:N)</small></div>
+        <div class="grid grid-3" style="margin-bottom:20px">
+          <div class="fg"><label>Responsável</label><select><option>Cabo Silva (ID 3)</option><option>Sgt Pereira (ID 5)</option></select></div>
+          <div class="fg"><label>Membro 2</label><select><option value="">— opcional —</option><option>Sd. Costa (ID 8)</option><option>Sd. Rocha (ID 9)</option></select></div>
+          <div class="fg"><label>Membro 3</label><select><option value="">— opcional —</option><option>Sd. Lima (ID 10)</option></select></div>
+        </div>
+
+        <div class="sdiv">📷 Fotos — <small>FotoOcorrencia</small></div>
+        <div class="fg">
+          <input type="file" multiple accept="image/*" style="padding:8px;border:2px dashed #e2e8f0;border-radius:8px;width:100%;cursor:pointer" />
+          <span class="hint">Múltiplas fotos permitidas. JPG, PNG, WEBP.</span>
+        </div>
+      </div>
+      <div class="form-nav">
+        <span class="step-indicator">Passo 5 de 5</span>
+        <div class="form-nav-right">
+          <button class="btn btn-outline" onclick="goTo(4)">← Anterior</button>
+          <button class="btn btn-green" onclick="submeter()">✅ Salvar Ocorrência</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+// ══════════════════════════════════════════════════════════
+//  ESTADO
+// ══════════════════════════════════════════════════════════
+let currentStep = 1;
+let tipoSelecionado = '';
+let modoVeiculo = false;
+let vitimasNormais = [];   // modo normal
+let veiculos = [];          // modo veicular [ { id, tipo, desc, cor, vitimas:[] } ]
+let vitimaCount = 0;
+let veiculoCount = 0;
+
+// Paleta de cores para veículos (ciclica)
+const CORES_VEICULO = ['red','blue','green','orange','purple'];
+const TIPOS_VEICULO = [
+  { key:'carro',    icon:'🚗', label:'Automóvel' },
+  { key:'moto',     icon:'🏍️', label:'Motocicleta' },
+  { key:'onibus',   icon:'🚌', label:'Ônibus' },
+  { key:'caminhao', icon:'🚚', label:'Caminhão' },
+  { key:'van',      icon:'🚐', label:'Van/Micro-ônibus' },
+  { key:'bicicleta',icon:'🚲', label:'Bicicleta' },
+  { key:'outros',   icon:'🚦', label:'Outros' },
+];
+
+const TRAUMAS = [
+  {id:1,l:'Queda de altura (+2m)'},{id:2,l:'Queda da própria altura'},
+  {id:3,l:'Ferimento arma de fogo'},{id:4,l:'Ferimento arma branca'},
+  {id:5,l:'Colisão veicular'},{id:6,l:'Atropelamento'},
+];
+const PROCEDIMENTOS = [
+  {id:1,l:'Monitor de sinais vitais'},{id:2,l:'Oxigenoterapia'},
+  {id:3,l:'RCP'},{id:4,l:'Imobilização padrão'},
+  {id:5,l:'Punção venosa periférica'},{id:6,l:'Curativo compressivo'},
+];
+const EMERGENCIAS = [
+  {id:1,l:'PCR'},{id:2,l:'OVACE'},{id:3,l:'Convulsão'},
+  {id:4,l:'Síncope/Desmaio'},{id:5,l:'Autoextermínio'},
+  {id:6,l:'Embriaguez'},{id:7,l:'AVC (suspeita)'},{id:8,l:'Infarto (suspeita)'},
+];
+const ABERTURA_OCULAR  = [{id:1,l:'Ausente (1)'},{id:2,l:'À dor (2)'},{id:3,l:'À voz (3)'},{id:4,l:'Espontânea (4)'}];
+const RESPOSTA_VERBAL  = [{id:1,l:'Ausente (1)'},{id:2,l:'Incompreensível (2)'},{id:3,l:'Desconexo (3)'},{id:4,l:'Confuso (4)'},{id:5,l:'Orientado (5)'}];
+const RESPOSTA_MOTORA  = [{id:1,l:'Ausente (1)'},{id:2,l:'Extensão (2)'},{id:3,l:'Flexão (3)'},{id:4,l:'Retira dor (4)'},{id:5,l:'Adequada (5)'},{id:6,l:'Obedece (6)'}];
+
+// ══════════════════════════════════════════════════════════
+//  NAVEGAÇÃO
+// ══════════════════════════════════════════════════════════
+function goTo(step) {
+  if (step === 2 && !tipoSelecionado) { alert('⚠️ Selecione o tipo de ocorrência.'); return; }
+  if (step === 4) renderAvaliacaoClinica();
+  if (step === 5) preencherResumo();
+  document.querySelectorAll('.step-content').forEach(el => el.style.display = 'none');
+  document.getElementById('step-' + step).style.display = 'block';
+  currentStep = step;
+  updateStepper();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function updateStepper() {
+  document.querySelectorAll('.step[data-step]').forEach(el => {
+    const n = parseInt(el.dataset.step);
+    el.classList.remove('active','done');
+    if (n === currentStep) el.classList.add('active');
+    else if (n < currentStep) el.classList.add('done');
+  });
+}
+
+// ══════════════════════════════════════════════════════════
+//  PASSO 1 — TIPO
+// ══════════════════════════════════════════════════════════
+function selectTipo(el, tipo) {
+  document.querySelectorAll('.tipo-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  tipoSelecionado = tipo;
+}
+
+// ══════════════════════════════════════════════════════════
+//  PASSO 2 — CHIPS / CEP
+// ══════════════════════════════════════════════════════════
+function selectChip(el, group) {
+  el.closest('.chip-row').querySelectorAll('.chip').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function maskCep(i) {
+  let v = i.value.replace(/\D/g,'');
+  if (v.length > 5) v = v.slice(0,5)+'-'+v.slice(5,8);
+  i.value = v;
+}
+async function buscarCep() {
+  const cep = document.getElementById('cep').value.replace(/\D/g,'');
+  const s = document.getElementById('cep-status');
+  if (cep.length !== 8) return;
+  s.textContent = '⏳ Buscando...'; s.style.color = '';
+  try {
+    const d = await fetch(`https://viacep.com.br/ws/${cep}/json/`).then(r => r.json());
+    if (d.erro) { s.textContent = '❌ CEP não encontrado.'; s.style.color='#dc2626'; return; }
+    document.getElementById('endereco').value = d.logradouro || '';
+    document.getElementById('bairro').value   = d.bairro    || '';
+    document.getElementById('cidade').value   = d.localidade|| '';
+    document.getElementById('uf').value       = d.uf        || '';
+    s.textContent = '✅ Endereço preenchido!'; s.style.color = '#16a34a';
+  } catch { s.textContent = '❌ Erro ao buscar CEP.'; s.style.color='#dc2626'; }
+}
+
+// ══════════════════════════════════════════════════════════
+//  TOGGLE MODO VEICULAR
+// ══════════════════════════════════════════════════════════
+function toggleModoVeiculo() {
+  const chk = document.getElementById('toggle-veiculo');
+  // Se clicou no wrapper (não no input direto), toggle o checkbox
+  modoVeiculo = chk.checked;
+  document.getElementById('modo-normal').style.display = modoVeiculo ? 'none' : 'block';
+  document.getElementById('modo-veiculo').style.display = modoVeiculo ? 'block' : 'none';
+  document.getElementById('toggle-veiculo-wrap').classList.toggle('active-mode', modoVeiculo);
+  document.getElementById('modo-badge').style.display = modoVeiculo ? 'inline-flex' : 'none';
+}
+
+// ══════════════════════════════════════════════════════════
+//  MODO NORMAL — vítimas simples
+// ══════════════════════════════════════════════════════════
+function addVitima(containerId, veiculoId) {
+  vitimaCount++;
+  const id = vitimaCount;
+  const vitima = { id, nome: `Vítima ${id}`, veiculoId: veiculoId || null };
+
+  if (veiculoId == null) {
+    vitimasNormais.push(vitima);
+    renderVitimaSimples(document.getElementById('vitimas-container'), id, vitimasNormais.length);
+  } else {
+    const veiculo = veiculos.find(v => v.id === veiculoId);
+    if (veiculo) {
+      veiculo.vitimas.push(vitima);
+      renderVitimaSimples(document.getElementById(`vv-${veiculoId}`), id, veiculo.vitimas.length, veiculoId);
+    }
+  }
+}
+
+function renderVitimaSimples(container, id, numero, veiculoId) {
+  const isVeiculo = veiculoId != null;
+  const wrapClass = isVeiculo ? 'veiculo-vitima-wrap' : 'vitima-wrap';
+  const headerClass = isVeiculo ? 'veiculo-vitima-header' : 'vitima-header';
+  const bodyClass = isVeiculo ? 'veiculo-vitima-body' : 'vitima-body';
+
+  const div = document.createElement('div');
+  div.className = wrapClass;
+  div.id = `vitima-wrap-${id}`;
+  div.innerHTML = `
+    <div class="${headerClass}" onclick="toggleVitimaBody(${id})">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="vitima-badge" style="background:${isVeiculo ? '#64748b' : 'var(--red)'}">V${id}</div>
+        <div>
+          <div class="vitima-title" id="vtitle-${id}">Vítima ${id}</div>
+          <div style="font-size:11px;color:#94a3b8">Clique para expandir</div>
+        </div>
+      </div>
+      <button onclick="removeVitimaGlobal(event,${id})" style="background:none;border:1px solid #fecaca;color:#dc2626;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:12px">🗑️</button>
+    </div>
+    <div class="${bodyClass}" id="vitima-body-${id}">
+      ${buildVitimaFields(id)}
+    </div>`;
+  container.appendChild(div);
+}
+
+function buildVitimaFields(id) {
+  return `
+    <div class="grid grid-2" style="gap:12px">
+      <div class="fg"><label>CPF *</label><input type="text" id="v${id}_cpf" placeholder="000.000.000-00" maxlength="14" oninput="maskCpf(this)" onblur="atualizarNome(${id})" /></div>
+      <div class="fg"><label>Nome Completo *</label><input type="text" id="v${id}_nome" placeholder="Nome da vítima" oninput="atualizarNome(${id})" /></div>
+      <div class="fg"><label>Nome Social</label><input type="text" id="v${id}_social" /></div>
+      <div class="fg"><label>Data de Nascimento *</label><input type="date" id="v${id}_nasc" /></div>
+      <div class="fg"><label>Telefone</label><input type="text" id="v${id}_tel" placeholder="(00) 00000-0000" /></div>
+      <div class="fg"><label>Nome da Mãe</label><input type="text" id="v${id}_mae" /></div>
+      <div class="fg col-2"><label>Gênero</label>
+        <div style="display:flex;gap:16px;margin-top:6px">
+          <label style="display:flex;align-items:center;gap:6px;font-weight:normal;font-size:13px"><input type="radio" name="g${id}" value="1" /> Masculino</label>
+          <label style="display:flex;align-items:center;gap:6px;font-weight:normal;font-size:13px"><input type="radio" name="g${id}" value="2" /> Feminino</label>
+          <label style="display:flex;align-items:center;gap:6px;font-weight:normal;font-size:13px"><input type="radio" name="g${id}" value="3" /> Não informado</label>
+        </div>
+      </div>
+    </div>`;
+}
+
+function toggleVitimaBody(id) {
+  document.getElementById(`vitima-body-${id}`)?.classList.toggle('collapsed');
+}
+function atualizarNome(id) {
+  const nome = document.getElementById(`v${id}_nome`)?.value;
+  const el = document.getElementById(`vtitle-${id}`);
+  if (el && nome) el.textContent = nome;
+}
+function removeVitimaGlobal(e, id) {
+  e.stopPropagation();
+  if (!confirm('Remover esta vítima?')) return;
+  document.getElementById(`vitima-wrap-${id}`)?.remove();
+  vitimasNormais = vitimasNormais.filter(v => v.id !== id);
+  veiculos.forEach(v => { v.vitimas = v.vitimas.filter(vi => vi.id !== id); });
+}
+function maskCpf(i) {
+  let v = i.value.replace(/\D/g,'');
+  v = v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');
+  i.value = v;
+}
+
+// ══════════════════════════════════════════════════════════
+//  MODO VEICULAR — veículos + vítimas aninhadas
+// ══════════════════════════════════════════════════════════
+function addVeiculo() {
+  veiculoCount++;
+  const id = veiculoCount;
+  const cor = CORES_VEICULO[(veiculoCount - 1) % CORES_VEICULO.length];
+  veiculos.push({ id, tipo: 'carro', desc: '', cor, vitimas: [] });
+
+  const container = document.getElementById('veiculos-container');
+  const div = document.createElement('div');
+  div.className = 'veiculo-wrap';
+  div.id = `veiculo-${id}`;
+  div.dataset.color = cor;
+
+  div.innerHTML = `
+    <div class="veiculo-header" onclick="toggleVeiculoBody(${id})">
+      <div style="display:flex;align-items:center">
+        <span class="veiculo-type-icon" id="vicon-${id}">🚗</span>
+        <div class="veiculo-info">
+          <strong id="vlabel-${id}">Veículo ${id}</strong>
+          <span id="vdesc-${id}">Clique em ✏️ para configurar</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="badge badge-orange" id="vcount-${id}">0 vítimas</span>
+        <button onclick="editarVeiculo(event,${id})" style="background:none;border:1px solid #e2e8f0;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:12px">✏️ Config.</button>
+        <button onclick="removerVeiculo(event,${id})" style="background:none;border:1px solid #fecaca;color:#dc2626;border-radius:6px;padding:4px 10px;cursor:pointer;font-size:12px">🗑️</button>
+        <span style="color:#94a3b8;font-size:12px">▼</span>
+      </div>
+    </div>
+
+    <!-- Painel de configuração do veículo (inicialmente visível) -->
+    <div id="vconfig-${id}" style="padding:16px 20px;border-top:1px solid #e2e8f0;background:#fffbeb">
+      <div class="grid grid-3" style="gap:12px;margin-bottom:12px">
+        <div class="fg">
+          <label>Tipo de Veículo</label>
+          <select onchange="updateVeiculoTipo(${id},this.value)">
+            ${TIPOS_VEICULO.map(t => `<option value="${t.key}" data-icon="${t.icon}">${t.icon} ${t.label}</option>`).join('')}
+          </select>
+        </div>
+        <div class="fg">
+          <label>Placa / Identificação</label>
+          <input type="text" placeholder="Ex: ABC-1234 ou Ônibus Linha 101" oninput="updateVeiculoDesc(${id},this.value)" style="text-transform:uppercase" />
+        </div>
+        <div class="fg">
+          <label>Cor do Veículo</label>
+          <input type="text" placeholder="Ex: Prata, Branco..." id="vcor-${id}" />
+        </div>
+      </div>
+      <button onclick="fecharConfigVeiculo(${id})" class="btn btn-sm btn-orange">✓ Confirmar Veículo</button>
+    </div>
+
+    <!-- Corpo com vítimas -->
+    <div class="veiculo-body" id="vbody-${id}">
+      <div style="padding:12px 0 4px">
+        <p style="font-size:12px;color:#64748b;margin-bottom:12px">Adicione as vítimas que estavam neste veículo:</p>
+        <div id="vv-${id}"></div>
+        <button class="add-btn" style="margin-top:8px" onclick="addVitima('vv-${id}',${id})">+ Adicionar Vítima neste Veículo</button>
+      </div>
+    </div>`;
+
+  container.appendChild(div);
+}
+
+function toggleVeiculoBody(id) {
+  const b = document.getElementById(`vbody-${id}`);
+  const c = document.getElementById(`vconfig-${id}`);
+  if (!b.classList.contains('collapsed')) { b.classList.add('collapsed'); }
+  else { b.classList.remove('collapsed'); }
+}
+
+function editarVeiculo(e, id) {
+  e.stopPropagation();
+  const cfg = document.getElementById(`vconfig-${id}`);
+  cfg.style.display = cfg.style.display === 'none' ? 'block' : 'none';
+}
+
+function fecharConfigVeiculo(id) {
+  document.getElementById(`vconfig-${id}`).style.display = 'none';
+  document.getElementById(`vbody-${id}`).classList.remove('collapsed');
+}
+
+function updateVeiculoTipo(id, tipo) {
+  const t = TIPOS_VEICULO.find(t => t.key === tipo);
+  if (!t) return;
+  document.getElementById(`vicon-${id}`).textContent = t.icon;
+  document.getElementById(`vlabel-${id}`).textContent = `${t.label} ${id}`;
+  const v = veiculos.find(v => v.id === id);
+  if (v) v.tipo = tipo;
+}
+
+function updateVeiculoDesc(id, desc) {
+  const descEl = document.getElementById(`vdesc-${id}`);
+  if (descEl) descEl.textContent = desc || 'Sem identificação';
+  const v = veiculos.find(v => v.id === id);
+  if (v) v.desc = desc;
+}
+
+function removerVeiculo(e, id) {
+  e.stopPropagation();
+  if (!confirm('Remover este veículo e todas as vítimas associadas?')) return;
+  document.getElementById(`veiculo-${id}`)?.remove();
+  veiculos = veiculos.filter(v => v.id !== id);
+}
+
+// Atualiza badge de contagem de vítimas
+function atualizarContadorVitimas(veiculoId) {
+  const v = veiculos.find(v => v.id === veiculoId);
+  if (!v) return;
+  const count = v.vitimas.length;
+  const badge = document.getElementById(`vcount-${veiculoId}`);
+  if (badge) badge.textContent = `${count} vítima${count !== 1 ? 's' : ''}`;
+}
+
+// ══════════════════════════════════════════════════════════
+//  PASSO 4 — AVALIAÇÃO CLÍNICA (por vítima)
+// ══════════════════════════════════════════════════════════
+function getAllVitimas() {
+  const fromNormal = Array.from(document.querySelectorAll('#vitimas-container .vitima-wrap'))
+    .map(w => ({ id: parseInt(w.id.replace('vitima-wrap-','')), nome: w.querySelector('[id^=vtitle-]')?.textContent || '?' }));
+  const fromVeiculos = Array.from(document.querySelectorAll('[id^=veiculo-] .veiculo-vitima-wrap'))
+    .map(w => ({ id: parseInt(w.id.replace('vitima-wrap-','')), nome: w.querySelector('[id^=vtitle-]')?.textContent || '?' }));
+  return modoVeiculo ? fromVeiculos : fromNormal;
+}
+
+function renderAvaliacaoClinica() {
+  const tabs = document.getElementById('av-tabs');
+  const cont = document.getElementById('av-container');
+  const empty = document.getElementById('av-empty');
+  tabs.innerHTML = ''; cont.innerHTML = '';
+
+  const vitimas = getAllVitimas();
+  if (vitimas.length === 0) { empty.style.display = 'flex'; return; }
+  empty.style.display = 'none';
+
+  vitimas.forEach((v, i) => {
+    const tab = document.createElement('button');
+    tab.className = 'btn btn-sm ' + (i === 0 ? 'btn-primary' : 'btn-outline');
+    tab.id = `tab-av-${v.id}`;
+    tab.textContent = v.nome;
+    tab.onclick = () => showAvTab(v.id, vitimas);
+    tabs.appendChild(tab);
+
+    const panel = document.createElement('div');
+    panel.id = `av-panel-${v.id}`;
+    panel.style.display = i === 0 ? 'block' : 'none';
+    panel.innerHTML = buildAvPanel(v.id, v.nome);
+    cont.appendChild(panel);
+  });
+}
+
+function showAvTab(id, vitimas) {
+  vitimas.forEach(v => {
+    const p = document.getElementById(`av-panel-${v.id}`);
+    if (p) p.style.display = 'none';
+    const t = document.getElementById(`tab-av-${v.id}`);
+    if (t) { t.classList.remove('btn-primary'); t.classList.add('btn-outline'); }
+  });
+  document.getElementById(`av-panel-${id}`).style.display = 'block';
+  const t = document.getElementById(`tab-av-${id}`);
+  if (t) { t.classList.add('btn-primary'); t.classList.remove('btn-outline'); }
+}
+
+function buildAvPanel(id, nome) {
+  const traumaTags   = TRAUMAS.map(t => `<div class="chip tag-chip" onclick="this.classList.toggle('selected')">${t.l}</div>`).join('');
+  const procTags     = PROCEDIMENTOS.map(p => `<div class="chip tag-chip proc" onclick="this.classList.toggle('selected')">${p.l}</div>`).join('');
+  const emergTags    = EMERGENCIAS.map(e => `<div class="chip tag-chip emerg" onclick="this.classList.toggle('selected')">${e.l}</div>`).join('');
+  const opts = (arr) => arr.map(x => `<option value="${x.id}">${x.l}</option>`).join('');
+
+  return `
+    <div style="border:1.5px solid #e2e8f0;border-radius:10px;overflow:hidden;margin-bottom:20px">
+      <div style="background:#f8fafc;padding:12px 20px;border-bottom:1px solid #e2e8f0">
+        <strong>${nome}</strong> — Avaliação Clínica
+      </div>
+      <div style="padding:20px">
+        <div class="sdiv">💓 Sinais Vitais</div>
+        <div class="sinais-grid" style="margin-bottom:20px">
+          <div class="sinal-box">
+            <label>Pressão Arterial</label>
+            <div class="pa-wrap"><input type="number" placeholder="120" id="av${id}_pas" /><span class="pa-sep">/</span><input type="number" placeholder="80" id="av${id}_pad" /></div>
+            <div class="unit">mmHg</div>
+          </div>
+          <div class="sinal-box"><label>Pulso</label><input type="number" id="av${id}_pulso" placeholder="72" /><div class="unit">bpm</div></div>
+          <div class="sinal-box"><label>Respiração</label><input type="number" id="av${id}_resp" placeholder="16" /><div class="unit">irpm</div></div>
+          <div class="sinal-box"><label>Temperatura</label><input type="number" id="av${id}_temp" placeholder="36.5" step="0.1" /><div class="unit">°C</div></div>
+          <div class="sinal-box"><label>Saturação O₂</label><input type="number" id="av${id}_sat" placeholder="98" min="0" max="100" /><div class="unit">%</div></div>
+          <div class="sinal-box"><label>SatO₂ c/ O₂</label><input type="number" id="av${id}_sato2" placeholder="97" /><div class="unit">L/min</div></div>
+        </div>
+
+        <div class="sdiv">🧠 Escala de Glasgow (3 componentes)</div>
+        <div class="grid grid-3" style="margin-bottom:4px">
+          <div class="fg"><label>Abertura Ocular (O)</label><select id="av${id}_ao"><option value="">—</option>${opts(ABERTURA_OCULAR)}</select></div>
+          <div class="fg"><label>Resposta Verbal (V)</label><select id="av${id}_rv"><option value="">—</option>${opts(RESPOSTA_VERBAL)}</select></div>
+          <div class="fg"><label>Resposta Motora (M)</label><select id="av${id}_rm"><option value="">—</option>${opts(RESPOSTA_MOTORA)}</select></div>
+        </div>
+        <div style="font-size:11px;color:#64748b;margin-bottom:20px">
+          ⚠️ Banco: <code>idAberturaOcular · idRespostaVerbal · idRespostaMotora</code> (substituem o campo <code>Glasgow INT</code> antigo)
+        </div>
+
+        <div class="sdiv" style="color:#b91c1c">🩹 Traumas <small style="color:#94a3b8">(TraumaAvaliacaoClinica N:N)</small></div>
+        <div class="chip-row" style="margin-bottom:20px">${traumaTags}</div>
+
+        <div class="sdiv" style="color:#7c3aed">⚡ Emergências <small style="color:#94a3b8">(EmergenciaAvaliacaoClinica N:N)</small></div>
+        <div class="chip-row" style="margin-bottom:20px">${emergTags}</div>
+
+        <div class="sdiv" style="color:#1d4ed8">🔧 Procedimentos <small style="color:#94a3b8">(ProcedimentoAvaliacaoClinica N:N)</small></div>
+        <div class="chip-row">${procTags}</div>
+      </div>
+    </div>`;
+}
+
+// ══════════════════════════════════════════════════════════
+//  PASSO 5 — RESUMO
+// ══════════════════════════════════════════════════════════
+function preencherResumo() {
+  const tipos = { simplificado:'📋 Simplificado', incendio:'🔥 Incêndio', salvamento:'🚑 Salvamento' };
+  document.getElementById('resumo-tipo').textContent = tipos[tipoSelecionado] || '—';
+  document.getElementById('resumo-data').textContent = document.getElementById('data_ocorrencia')?.value || '—';
+  const vitimas = getAllVitimas();
+  document.getElementById('resumo-vitimas').textContent = vitimas.length + ' vítima(s)';
+  document.getElementById('resumo-veiculos').textContent = modoVeiculo ? veiculos.length + ' veículo(s)' : '—  (modo normal)';
+  const end = [document.getElementById('endereco')?.value, document.getElementById('numero')?.value,
+               document.getElementById('bairro')?.value, document.getElementById('cidade')?.value].filter(Boolean).join(', ');
+  document.getElementById('resumo-endereco').textContent = end || '—';
+}
+
+// ══════════════════════════════════════════════════════════
+//  SUBMIT
+// ══════════════════════════════════════════════════════════
+function submeter() {
+  const vitimas = getAllVitimas();
+  const estrutura = modoVeiculo
+    ? veiculos.map(v => ({
+        veiculo: { tipo: v.tipo, identificacao: v.desc, cor: v.desc },
+        vitimas: v.vitimas.map(vi => ({ id: vi.id, nome: vi.nome }))
+      }))
+    : vitimas.map(v => ({ id: v.id, nome: v.nome }));
+
+  const payload = {
+    ocorrencia: {
+      idTipoOcorrencia: { simplificado:1, incendio:2, salvamento:3 }[tipoSelecionado],
+      dataOcorrencia: document.getElementById('data_ocorrencia')?.value,
+      relatoFinal: document.getElementById('relato_final')?.value,
+    },
+    modoVeiculo,
+    estrutura,
+  };
+  console.log('[PROTÓTIPO v2] Payload:', payload);
+  alert(`✅ PROTÓTIPO — Simulação de salvamento!\n\n👁️ Abra o console (F12) para ver o payload gerado.\n\n🚗 Modo veicular: ${modoVeiculo ? 'SIM' : 'NÃO'}\n👤 Total de vítimas: ${vitimas.length}${modoVeiculo ? `\n🚗 Total de veículos: ${veiculos.length}` : ''}`);
+}
+
+// INIT
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('data_ocorrencia').value = new Date().toISOString().split('T')[0];
+});
+</script>
+</body>
+</html>

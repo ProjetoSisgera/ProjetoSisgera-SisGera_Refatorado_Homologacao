@@ -1,0 +1,136 @@
+// src/contexts/AuthContext.js
+
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { authApi, corporacaoApi, setTokens, clearTokens, getToken, decodeJwt } from '../services/api';
+
+const AuthContext = createContext(null);
+
+function isAdminPayload(payload) {
+  return payload?.permissoes?.some(
+    p => p.entidade === 'Corporacao' && p.acao === 'Cadastrar'
+  ) ?? false;
+}
+
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [selectedCorporacao, setSelectedCorporacao] = useState(() => {
+    try {
+      const stored = localStorage.getItem('@sisgera:selectedCorporacao');
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  // Inicializa o estado de auth a partir do token armazenado
+  useEffect(() => {
+    const token = getToken();
+    if (token) {
+      const payload = decodeJwt(token);
+      if (payload && payload.exp * 1000 > Date.now()) {
+        setUser(payload);
+
+        // Para não-admins, garante que a corporação armazenada bate com o JWT
+        if (!isAdminPayload(payload) && payload?.idCorporacao) {
+          setSelectedCorporacao(prev => {
+            if (prev && prev.idCorporacao !== payload.idCorporacao) {
+              localStorage.removeItem('@sisgera:selectedCorporacao');
+              return null;
+            }
+            return prev;
+          });
+        }
+      } else {
+        clearTokens();
+        localStorage.removeItem('@sisgera:selectedCorporacao');
+        setSelectedCorporacao(null);
+      }
+    }
+    setLoading(false);
+  }, []);
+
+  // Desloga automaticamente quando o refresh token também expirar
+  useEffect(() => {
+    const handler = () => {
+      setUser(null);
+      setSelectedCorporacao(null);
+      localStorage.removeItem('@sisgera:selectedCorporacao');
+    };
+    window.addEventListener('sisgera:session-expired', handler);
+    return () => window.removeEventListener('sisgera:session-expired', handler);
+  }, []);
+
+  const selectCorporacao = useCallback((corporacao) => {
+    setSelectedCorporacao(corporacao);
+    if (corporacao) {
+      localStorage.setItem('@sisgera:selectedCorporacao', JSON.stringify(corporacao));
+    } else {
+      localStorage.removeItem('@sisgera:selectedCorporacao');
+    }
+  }, []);
+
+  const login = useCallback(async (email, senha) => {
+    const data = await authApi.login(email, senha);
+    setTokens(data.accessToken, data.refreshToken);
+    const payload = decodeJwt(data.accessToken);
+    setUser(payload);
+
+    const isAdmin = isAdminPayload(payload);
+
+    // Limpa corporação armazenada para evitar usar dados de sessão anterior inválida
+    selectCorporacao(null);
+
+    // Para usuários não-admin, auto-seleciona a corporação via idCorporacao do JWT
+    if (!isAdmin && payload?.idCorporacao) {
+      try {
+        const result = await corporacaoApi.get(payload.idCorporacao);
+        const corp = result?.Corporacao ?? result?.corporacao ?? result;
+        if (corp && corp.idCorporacao) {
+          selectCorporacao(corp);
+        } else {
+          selectCorporacao({ idCorporacao: payload.idCorporacao, nome: 'Minha Corporação' });
+        }
+      } catch {
+        selectCorporacao({ idCorporacao: payload.idCorporacao, nome: 'Minha Corporação' });
+      }
+    }
+
+    return { payload, isAdmin };
+  }, [selectCorporacao]);
+
+  const logout = useCallback(async () => {
+    try {
+      await authApi.logout();
+    } catch {
+      // Ignora erros de logout (token já pode ter expirado)
+    }
+    clearTokens();
+    localStorage.removeItem('@sisgera:selectedCorporacao');
+    setUser(null);
+    setSelectedCorporacao(null);
+  }, []);
+
+  return (
+    <AuthContext.Provider value={{
+      user,
+      loading,
+      isAuthenticated: !!user,
+      isAdmin: isAdminPayload(user),
+      selectedCorporacao,
+      login,
+      logout,
+      selectCorporacao,
+    }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth deve ser usado dentro de AuthProvider');
+  }
+  return context;
+}

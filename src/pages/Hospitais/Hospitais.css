@@ -1,0 +1,33 @@
+/* src/pages/Hospitais/Hospitais.css */
+
+.hospital-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.hospital-cell__icon {
+  color: var(--primaria, #e53e3e);
+  font-size: 15px;
+  flex-shrink: 0;
+}
+
+.hospitais-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 56px 24px;
+  color: var(--texto-secundario);
+  text-align: center;
+}
+
+.hospitais-empty__icon {
+  font-size: 40px;
+  opacity: 0.3;
+}
+
+.hospitais-empty p {
+  margin: 0;
+  font-size: 14px;
+}

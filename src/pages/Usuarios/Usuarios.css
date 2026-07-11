@@ -1,0 +1,383 @@
+/* src/pages/Usuarios/Usuarios.css */
+
+.usuarios-table .col-avatar {
+    width: 48px;
+}
+
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--cor-primaria, #D32F2F);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    text-transform: uppercase;
+    flex-shrink: 0;
+}
+
+.user-cell {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-cell__info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.user-cell__name {
+    font-weight: 600;
+    color: var(--texto-principal);
+    font-size: 14px;
+}
+
+.user-cell__email {
+    font-size: 12px;
+    color: var(--texto-secundario);
+}
+
+/* ---- Modal ---- */
+.modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 16px;
+}
+
+.modal {
+    background: var(--fundo-card, #fff);
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 480px;
+    animation: modal-in 0.2s ease-out;
+}
+
+@keyframes modal-in {
+    from { opacity: 0; transform: scale(0.95) translateY(-8px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid var(--borda, #e5e7eb);
+}
+
+.modal__header h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--texto-principal);
+    margin: 0;
+}
+
+.modal__close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--texto-secundario);
+    font-size: 18px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    transition: background 0.15s;
+}
+.modal__close:hover { background: var(--fundo-hover, #f3f4f6); }
+
+.modal__body {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.modal__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 24px 20px;
+    border-top: 1px solid var(--borda, #e5e7eb);
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-field label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--texto-secundario);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.form-field input,
+.form-field select {
+    padding: 10px 14px;
+    border: 1.5px solid var(--borda, #e5e7eb);
+    border-radius: 8px;
+    font-size: 14px;
+    background: var(--fundo-input, #fff);
+    color: var(--texto-principal);
+    transition: border-color 0.15s;
+    outline: none;
+}
+
+.form-field input:focus,
+.form-field select:focus {
+    border-color: var(--cor-primaria, #D32F2F);
+}
+
+/* ---- Botões ---- */
+.btn-secondary {
+    padding: 10px 20px;
+    border: 1.5px solid var(--borda, #e5e7eb);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--texto-principal);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.btn-secondary:hover { background: var(--fundo-hover, #f3f4f6); }
+
+.btn-danger {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background: #dc2626;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+.btn-danger:hover { background: #b91c1c; }
+.btn-danger:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* ---- Delete modal ---- */
+.modal--delete .modal__body p {
+    font-size: 15px;
+    color: var(--texto-principal);
+    margin: 0;
+}
+
+.modal--delete strong {
+    color: var(--cor-primaria, #D32F2F);
+}
+
+.modal-error {
+    padding: 10px 14px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    color: #dc2626;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* ---- Lista de perfis ---- */
+.perfis-list {
+    padding: 12px;
+    background: var(--fundo-hover, #f9fafb);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.perfis-list__label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--texto-secundario);
+    margin: 0 0 6px 0;
+    text-transform: uppercase;
+}
+
+.perfil-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--texto-principal);
+    padding: 4px 0;
+    min-height: 32px;
+}
+
+.perfil-item__icon {
+    color: var(--cor-primaria, #D32F2F);
+    flex-shrink: 0;
+}
+
+.perfil-item__name {
+    flex: 1;
+}
+
+.perfil-item__actions {
+    display: flex;
+    gap: 4px;
+    opacity: 0;
+    transition: opacity 0.15s;
+}
+
+.perfil-item:hover .perfil-item__actions {
+    opacity: 1;
+}
+
+.perfil-item__confirm {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    font-size: 13px;
+}
+
+.perfil-item__edit {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+}
+
+.perfil-item__edit input {
+    flex: 1;
+    padding: 6px 10px;
+    border: 1.5px solid var(--cor-primaria, #D32F2F);
+    border-radius: 6px;
+    font-size: 13px;
+    background: var(--fundo-input, #fff);
+    color: var(--texto-principal);
+    outline: none;
+}
+
+/* Botões extra-pequenos */
+.btn-xs {
+    padding: 5px 10px !important;
+    font-size: 12px !important;
+    border-radius: 6px !important;
+}
+
+/* ---- Formulário criar perfil ---- */
+.perfil-create-form {
+    margin-top: 4px;
+}
+
+.perfil-create-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.perfil-create-row input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1.5px solid var(--borda, #e5e7eb);
+    border-radius: 8px;
+    font-size: 14px;
+    background: var(--fundo-input, #fff);
+    color: var(--texto-principal);
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+.perfil-create-row input:focus {
+    border-color: var(--cor-primaria, #D32F2F);
+}
+
+.modal--perfis {
+    max-width: 500px;
+}
+
+/* ---- Modal de Permissões ---- */
+.modal--permissions {
+    max-width: 520px;
+}
+
+.perm-group {
+    margin-bottom: 16px;
+}
+
+.perm-group__label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--texto-secundario);
+    margin: 0 0 8px 0;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--borda, #e5e7eb);
+}
+
+.perm-group__items {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.perm-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--texto-principal);
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: background 0.15s;
+    user-select: none;
+}
+
+.perm-checkbox:hover {
+    background: var(--fundo-hover, #f3f4f6);
+}
+
+.perm-checkbox input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--cor-primaria, #D32F2F);
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.perm-checkbox--loading {
+    opacity: 0.6;
+}
+
+/* ---- Dark mode ---- */
+body.dark-mode .modal {
+    background: var(--fundo-card-dark, #1e293b);
+}
+body.dark-mode .form-field input,
+body.dark-mode .form-field select {
+    background: #0f172a;
+    color: #f1f5f9;
+    border-color: #334155;
+}
+body.dark-mode .btn-secondary {
+    border-color: #334155;
+    color: #f1f5f9;
+}
+body.dark-mode .btn-secondary:hover { background: #1e293b; }
+body.dark-mode .modal-error {
+    background: #450a0a;
+    border-color: #991b1b;
+    color: #fca5a5;
+}

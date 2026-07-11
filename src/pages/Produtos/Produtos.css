@@ -1,0 +1,23 @@
+/* src/pages/Produtos/Produtos.css
+   Apenas estilos exclusivos desta pagina.
+   Compartilhados: components.css | Dark mode: dark-mode.css */
+
+/* --- ICONES KPI (cores semanticas de Produtos) --- */
+.kpi-icon.products { background-color: #eff6ff; color: #2563eb; }
+.kpi-icon.active   { background-color: #ecfdf5; color: #059669; }
+.kpi-icon.alert    { background-color: #fff7ed; color: #ea580c; }
+
+/* --- CHIP ATIVO (azul para Produtos) --- */
+.chip-option.active {
+    background-color: #2563eb;
+    border-color: #2563eb;
+    color: #ffffff;
+    font-weight: 600;
+    box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.4);
+    transform: translateY(-1px);
+}
+
+/* --- FORM GRID (2 colunas fixas para formulario de cadastro) --- */
+.form-grid {
+    grid-template-columns: repeat(2, 1fr);
+}

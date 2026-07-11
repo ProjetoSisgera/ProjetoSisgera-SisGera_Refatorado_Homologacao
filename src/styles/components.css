@@ -1,0 +1,764 @@
+/* =========================================================
+   COMPONENTS — Classes reutilizáveis compartilhadas
+   Cada seção corresponde a um tipo de componente.
+   Estilos específicos de página ficam nos CSS de cada página.
+   ========================================================= */
+
+
+/* =========================================================
+   PAINEL (Card container)
+   ========================================================= */
+.panel {
+    background-color: var(--cor-painel);
+    border-radius: 12px;
+    box-shadow: var(--sombra-padrao);
+    overflow: hidden;
+    margin-bottom: 32px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+
+/* =========================================================
+   TABELA BASE (.data-table)
+   ========================================================= */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.data-table th,
+.data-table td {
+    padding: 16px 24px;
+    text-align: left;
+    border-bottom: 1px solid var(--cor-borda);
+}
+
+.data-table th {
+    color: var(--cor-texto-secundario);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background-color: #fafbfd;
+}
+
+.data-table td {
+    font-weight: 500;
+}
+
+.data-table th.text-right {
+    text-align: right;
+}
+
+.data-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+
+/* =========================================================
+   TABELA MODERNA (.modern-table)
+   ========================================================= */
+.modern-panel {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+.data-table.modern-table {
+    background: var(--cor-painel);
+    border-radius: 8px;
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    border-spacing: 0;
+    width: 100%;
+}
+
+.modern-table thead tr {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid var(--cor-borda);
+}
+
+.modern-table th {
+    color: #475569;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    padding: 16px 24px;
+    border: none;
+}
+
+.modern-table td {
+    padding: 16px 24px;
+    border-bottom: 1px solid #f1f5f9;
+    color: #334155;
+    font-size: 14px;
+}
+
+.modern-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.modern-table tbody tr:hover {
+    background-color: #f8fafc;
+}
+
+
+/* =========================================================
+   KPI CARDS
+   ========================================================= */
+.kpi-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.kpi-card {
+    background: var(--cor-painel);
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    border: 1px solid #edf2f7;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+}
+
+.kpi-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.kpi-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.kpi-label {
+    color: var(--cor-texto-secundario);
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 4px;
+}
+
+.kpi-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--cor-texto-principal);
+    margin: 0;
+    line-height: 1.2;
+}
+
+
+/* =========================================================
+   STATUS BADGES
+   ========================================================= */
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-weight: 600;
+    font-size: 12px;
+    display: inline-block;
+}
+
+.status-badge.pendente,
+.stat-card.pendente {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.status-badge.urgente {
+    background-color: var(--cor-urgente-bg);
+    color: var(--cor-urgente-text);
+}
+
+.status-badge.arquivado,
+.stat-card.arquivado {
+    background-color: #f0fdf4;
+    color: #14532d;
+}
+
+.status-badge.validado,
+.stat-card.validado {
+    background-color: #eff6ff;
+    color: #1e40af;
+}
+
+.status-badge.rascunho,
+.stat-card.rascunho {
+    background-color: #f3f4f6;
+    color: #4b5563;
+}
+
+.status-badge.concluido,
+.status-badge.ativo {
+    background-color: #f0fdf4;
+    color: #14532d;
+}
+
+.status-badge.inativo,
+.status-badge.baixado {
+    background-color: #f1f5f9;
+    color: #64748b;
+}
+
+.status-badge.em-manutencao {
+    background-color: #fff7ed;
+    color: #c2410c;
+}
+
+
+/* =========================================================
+   BOTÕES
+   ========================================================= */
+.btn {
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary {
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto-principal);
+    border: 1px solid var(--cor-borda);
+}
+
+.btn-secondary:hover {
+    background-color: #e2e8f0;
+}
+
+.btn-success {
+    background-color: #10b981;
+    color: #ffffff;
+    border: none;
+}
+
+.btn-success:hover {
+    background-color: #059669;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid #cbd5e1;
+    color: #64748b;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.btn-outline:hover {
+    background-color: #f8fafc;
+    border-color: #94a3b8;
+    color: #475569;
+}
+
+.btn-outline-secondary {
+    background: transparent;
+    border: 1px solid #cbd5e1;
+    color: #64748b;
+    padding: 10px 24px;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.btn-outline-secondary:hover {
+    border-color: #94a3b8;
+    color: #475569;
+    background-color: #f8fafc;
+}
+
+.btn:disabled {
+    background-color: var(--cor-borda);
+    color: var(--cor-texto-secundario);
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   FORMULÁRIOS
+   ========================================================= */
+.form-centered-container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.form-panel-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--cor-borda);
+}
+
+.form-panel-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.form-panel-body {
+    padding: 24px;
+}
+
+.form-panel-footer {
+    padding: 20px 24px;
+    border-top: 1px solid var(--cor-borda);
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px 24px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    font-weight: 600;
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: var(--cor-texto-principal);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--cor-borda);
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: var(--cor-painel);
+    color: var(--cor-texto-principal);
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--cor-primaria);
+    box-shadow: 0 0 0 3px rgba(211, 47, 47, 0.1);
+}
+
+.form-group textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+/* Remove setas dos inputs numéricos */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+
+/* =========================================================
+   CHIP SELECTORS
+   ========================================================= */
+.chip-group {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+}
+
+.chip-option {
+    border: 1px solid var(--cor-borda);
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: var(--cor-painel);
+    color: var(--cor-texto-secundario);
+    font-weight: 500;
+    font-size: 14px;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    user-select: none;
+}
+
+.chip-option:hover {
+    background-color: var(--cor-fundo);
+    border-color: #cbd5e1;
+}
+
+
+/* =========================================================
+   BUSCA E FILTROS
+   ========================================================= */
+.modern-filters {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding: 0 4px;
+}
+
+.search-input {
+    flex-grow: 1;
+    position: relative;
+    max-width: 400px;
+}
+
+.search-input .svg-inline--fa {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--cor-texto-secundario);
+}
+
+.search-input input {
+    width: 100%;
+    padding: 10px 12px 10px 36px;
+    border: 1px solid var(--cor-borda);
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: var(--cor-painel);
+    color: var(--cor-texto-principal);
+}
+
+
+/* =========================================================
+   BOTÕES DE AÇÃO (tabela)
+   ========================================================= */
+.actions-cell {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+.actions-cell.text-right {
+    text-align: right;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+/* Ação compacta (Ocorrências) */
+.action-btn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: #94a3b8;
+    padding: 6px;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.action-btn:hover {
+    color: #3b82f6;
+    background-color: #eff6ff;
+}
+
+/* Ação minimal (Produtos, Patrimonial, Doações) */
+.action-btn-minimal {
+    background: none;
+    border: none;
+    padding: 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: #94a3b8;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-btn-minimal:hover {
+    background-color: #f1f5f9;
+    color: #007bff;
+}
+
+.action-btn-minimal.delete:hover {
+    background-color: #fef2f2;
+    color: #ef4444;
+}
+
+.action-btn-minimal.toggle:hover {
+    background-color: #fee2e2;
+    color: #dc2626;
+}
+
+
+/* =========================================================
+   PAGINAÇÃO
+   ========================================================= */
+.pagination {
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--cor-texto-secundario);
+    font-size: 14px;
+    border-top: 1px solid var(--cor-borda);
+}
+
+.pagination-controls button {
+    background: none;
+    border: 1px solid var(--cor-borda);
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-left: 8px;
+    color: #475569;
+    transition: background-color 0.15s;
+}
+
+.pagination-controls button:hover {
+    background-color: var(--cor-fundo);
+}
+
+
+/* =========================================================
+   DROPDOWN DE AÇÕES
+   ========================================================= */
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 4px;
+    background: var(--cor-painel);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--cor-borda);
+    z-index: 50;
+    min-width: 160px;
+    overflow: hidden;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.dropdown-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 8px 16px;
+    font-size: 13px;
+    color: #475569;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: background 0.1s;
+}
+
+.dropdown-item:hover {
+    background-color: var(--cor-fundo);
+    color: #1e293b;
+}
+
+.dropdown-item.active {
+    background-color: #f1f5f9;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   VALIDAÇÃO DE FORMULÁRIO — campos com erro
+   ========================================================= */
+.field-error input,
+.field-error select,
+.field-error textarea {
+    border-color: #dc2626 !important;
+    background-color: #fff8f8;
+}
+
+.field-error input:focus,
+.field-error select:focus,
+.field-error textarea:focus {
+    outline-color: #dc2626;
+    box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
+}
+
+.field-error-msg {
+    display: block;
+    color: #dc2626;
+    font-size: 12px;
+    margin-top: 4px;
+    font-weight: 500;
+}
+
+.form-error-banner {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+body.dark-mode .field-error input,
+body.dark-mode .field-error select,
+body.dark-mode .field-error textarea {
+    background-color: #3b1010;
+}
+
+/* =========================================================
+   MODAL GENÉRICO (Produtos, Patrimônio, Doações, etc.)
+   ========================================================= */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 16px;
+    animation: fadeInOverlay 0.2s ease forwards;
+}
+
+@keyframes fadeInOverlay {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.modal-container {
+    background-color: var(--cor-painel);
+    border-radius: 12px;
+    width: 100%;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    animation: slideInModal 0.22s ease forwards;
+}
+
+@keyframes slideInModal {
+    from { transform: translateY(12px) scale(0.97); opacity: 0; }
+    to   { transform: translateY(0)    scale(1);    opacity: 1; }
+}
+
+.modal-header {
+    padding: 18px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--cor-borda);
+    flex-shrink: 0;
+}
+
+.modal-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.modal-close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--cor-texto-secundario);
+    line-height: 1;
+    padding: 4px;
+    border-radius: 6px;
+    transition: background 0.15s;
+}
+
+.modal-close-btn:hover {
+    background: var(--cor-borda);
+    color: var(--cor-texto-principal);
+}
+
+.modal-body {
+    padding: 24px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.modal-body.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    align-content: start;
+}
+
+.modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--cor-borda);
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+/* Dark mode overrides */
+body.dark-mode .modal-container {
+    background-color: #1e293b;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+body.dark-mode .modal-close-btn:hover {
+    background: #334155;
+}
+
+/* =========================================================
+   ANIMAÇÕES
+   ========================================================= */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUpFade {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

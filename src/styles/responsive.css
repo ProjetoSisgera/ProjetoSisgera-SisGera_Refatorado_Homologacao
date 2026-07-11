@@ -1,0 +1,367 @@
+/* =========================================================
+   RESPONSIVE — Media queries globais para todo o sistema
+   Breakpoints: 1200px (tablet landscape), 768px (tablet),
+                480px (mobile large), 375px (mobile small)
+   ========================================================= */
+
+
+/* =========================================================
+   1200px — Tablet landscape / telas menores
+   ========================================================= */
+@media (max-width: 1200px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .dashboard-content {
+        flex-direction: column;
+    }
+
+    .priorities-section,
+    .charts-section {
+        flex: 1;
+        width: 100%;
+    }
+}
+
+
+/* =========================================================
+   768px — Tablet / Mobile
+   ========================================================= */
+@media (max-width: 768px) {
+
+    /* --- Layout geral --- */
+    .main-content {
+        padding: 16px;
+        padding-top: 72px; /* 56px topbar fixa + 16px espaço */
+    }
+
+    .main-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .main-header h2 {
+        font-size: 22px;
+    }
+
+    .header-actions {
+        width: 100%;
+    }
+
+    .header-actions .btn-primary {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* --- Stats grid --- */
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    /* --- Tabelas — scroll horizontal --- */
+    .table-wrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Painéis com tabela direta (sem .table-wrapper) ganham scroll */
+    .panel > .data-table,
+    .panel > .modern-table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .data-table,
+    .modern-table {
+        min-width: 580px;
+    }
+
+    /* --- KPI cards --- */
+    .kpi-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    /* --- Filtros --- */
+    .filters-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .filter-select {
+        width: 100%;
+    }
+
+    .modern-filters {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .modern-filters .search-input,
+    .modern-filters select {
+        width: 100%;
+    }
+
+    /* --- Form grid --- */
+    .form-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* --- Chips --- */
+    .chip-options {
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    /* --- Paginação --- */
+    .pagination {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+    }
+
+    /* --- Dashboard: tabela e gráficos empilhados --- */
+    .dashboard-content {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .charts-section {
+        padding: 16px;
+    }
+
+    /* --- Modal --- */
+    .modal-container {
+        width: 100%;
+        max-width: 100%;
+        max-height: 100vh;
+        border-radius: 0;
+        margin: 0;
+    }
+
+    .modal-overlay {
+        align-items: flex-end;
+    }
+
+    .modal-content {
+        padding: 16px;
+    }
+
+    .modal-header {
+        padding: 16px;
+    }
+
+    /* --- Stepper --- */
+    .stepper {
+        gap: 8px;
+    }
+
+    .stepper-item {
+        width: auto;
+        flex: 1;
+    }
+
+    .stepper-title {
+        font-size: 11px;
+    }
+
+    /* --- Form navigation --- */
+    .form-navigation {
+        padding: 16px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    /* --- Type selection cards --- */
+    .type-selection {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .type-card {
+        padding: 16px;
+    }
+
+    .type-card .svg-inline--fa {
+        font-size: 28px;
+    }
+
+    /* --- Toggle cards --- */
+    .toggle-card-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    /* --- Doações: header-actions --- */
+    .header-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    /* --- Btn outline table actions --- */
+    .btn-outline {
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+
+    /* --- Stat card --- */
+    .stat-card {
+        padding: 16px;
+    }
+}
+
+
+/* =========================================================
+   480px — Mobile
+   ========================================================= */
+@media (max-width: 480px) {
+
+    /* padding-top mantém espaço para a topbar fixa de 56px */
+    .main-content {
+        padding-top: 70px;
+    }
+
+    .main-header h2 {
+        font-size: 20px;
+    }
+
+    /* --- Stats grid: 1 coluna --- */
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* --- KPI: 1 coluna --- */
+    .kpi-container {
+        grid-template-columns: 1fr;
+    }
+
+    /* --- Type selection: 1 coluna --- */
+    .type-selection {
+        grid-template-columns: 1fr;
+    }
+
+    /* --- Toggle card grid: 1 coluna --- */
+    .toggle-card-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* --- Botões primários full width --- */
+    .btn-primary {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* --- Tabela: colunas menos importantes podem ser escondidas --- */
+    .data-table th:nth-child(3),
+    .data-table td:nth-child(3),
+    .modern-table th:nth-child(3),
+    .modern-table td:nth-child(3) {
+        display: none;
+    }
+
+    /* --- Charts section --- */
+    .charts-section {
+        padding: 12px;
+        gap: 16px;
+    }
+
+    .chart-container {
+        min-height: 200px;
+    }
+
+    /* --- Stepper: esconder títulos, só números --- */
+    .stepper-title {
+        display: none;
+    }
+
+    .stepper::before {
+        top: 20px;
+    }
+
+    /* --- Toast position --- */
+    .toast-container {
+        bottom: 16px;
+        right: 16px;
+        left: 16px;
+    }
+
+    .toast {
+        width: 100%;
+    }
+
+    /* --- Abas --- */
+    .tabs {
+        padding: 0 12px;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .tab-link {
+        margin-right: 16px;
+    }
+
+    /* --- Pagination controls --- */
+    .pagination-controls {
+        gap: 4px;
+    }
+
+    .pagination-controls button {
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+}
+
+
+/* =========================================================
+   375px — Mobile pequeno (iPhone SE, Galaxy A)
+   ========================================================= */
+@media (max-width: 375px) {
+
+    .main-content {
+        padding: 12px;
+        padding-top: 68px;
+    }
+
+    .stat-card {
+        padding: 12px;
+        gap: 12px;
+    }
+
+    .stat-card .info h3 {
+        font-size: 26px;
+    }
+
+    .stat-card .icon {
+        font-size: 18px;
+        padding: 10px;
+    }
+
+    .kpi-card {
+        padding: 12px 14px;
+    }
+
+    .main-header h2 {
+        font-size: 18px;
+    }
+
+    .btn-primary {
+        font-size: 14px;
+        padding: 10px 16px;
+    }
+
+    .priorities-header h3 {
+        font-size: 15px;
+    }
+
+    .chart-title {
+        font-size: 15px;
+    }
+}
+
+

@@ -1,0 +1,382 @@
+// src/services/api.js
+// Camada de serviço centralizada para comunicação com a API
+
+const BASE_URL = 'http://localhost:3001';
+const OCCURRENCE_URL = 'http://localhost:3003';
+const INVENTORY_URL = 'http://localhost:3004';
+
+export const TOKEN_KEY = '@sisgera:accessToken';
+export const REFRESH_TOKEN_KEY = '@sisgera:refreshToken';
+
+export function getToken() {
+  return localStorage.getItem(TOKEN_KEY);
+}
+
+export function setTokens(accessToken, refreshToken) {
+  localStorage.setItem(TOKEN_KEY, accessToken);
+  if (refreshToken) {
+    localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+  }
+}
+
+export function clearTokens() {
+  localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(REFRESH_TOKEN_KEY);
+}
+
+export function getRefreshToken() {
+  return localStorage.getItem(REFRESH_TOKEN_KEY);
+}
+
+export function decodeJwt(token) {
+  try {
+    const base64Url = token.split('.')[1];
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+    return JSON.parse(jsonPayload);
+  } catch {
+    return null;
+  }
+}
+
+let _refreshingPromise = null;
+
+async function tryRefreshToken() {
+  if (_refreshingPromise) return _refreshingPromise;
+
+  _refreshingPromise = (async () => {
+    const refreshToken = getRefreshToken();
+    if (!refreshToken) throw new Error('Sem refresh token');
+
+    const res = await fetch(`${BASE_URL}/auth/refresh`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refreshToken }),
+    });
+
+    if (!res.ok) throw new Error('Refresh inválido');
+
+    const data = await res.json();
+    setTokens(data.accessToken, data.refreshToken ?? refreshToken);
+    return data.accessToken;
+  })().finally(() => { _refreshingPromise = null; });
+
+  return _refreshingPromise;
+}
+
+async function parseResponse(res) {
+  if (res.status === 204) return null;
+  const text = await res.text();
+  return text ? JSON.parse(text) : null;
+}
+
+async function request(path, options = {}, baseUrl = BASE_URL) {
+  const token = getToken();
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...options.headers,
+  };
+
+  let response = await fetch(`${baseUrl}${path}`, { ...options, headers });
+
+  if (response.status === 401) {
+    try {
+      const newToken = await tryRefreshToken();
+      response = await fetch(`${baseUrl}${path}`, {
+        ...options,
+        headers: { ...headers, Authorization: `Bearer ${newToken}` },
+      });
+    } catch {
+      clearTokens();
+      window.dispatchEvent(new Event('sisgera:session-expired'));
+      throw new Error('Sessão expirada. Faça login novamente.');
+    }
+  }
+
+  if (!response.ok) {
+    let errorMessage = `Erro ${response.status}`;
+    try {
+      const errorData = await response.json();
+      errorMessage = errorData.message || errorMessage;
+    } catch {}
+    throw new Error(errorMessage);
+  }
+
+  return parseResponse(response);
+}
+
+const occ = (path, options = {}) => request(path, options, OCCURRENCE_URL);
+const inv = (path, options = {}) => request(path, options, INVENTORY_URL);
+
+// Endpoints de autenticação
+export const authApi = {
+  login: (email, senha) =>
+    request('/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({ email, senha }),
+    }),
+
+  logout: () =>
+    request('/auth/logout', { method: 'POST' }),
+
+  refresh: (refreshToken) =>
+    request('/auth/refresh', {
+      method: 'POST',
+      body: JSON.stringify({ refreshToken }),
+    }),
+
+  me: () => request('/auth/me'),
+};
+
+// Endpoints de Usuário
+export const usuarioApi = {
+  list: (idCorporacao) =>
+    request(`/usuario/listUsuarioByCorporacao?idCorporacao=${idCorporacao}`),
+
+  create: (data) =>
+    request('/usuario/createUsuario', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  update: (data) =>
+    request('/usuario/updateUsuario', {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+
+  delete: (idUsuario, idCorporacao) =>
+    request(`/usuario/deleteUsuario?idUsuario=${idUsuario}&idCorporacao=${idCorporacao}`, {
+      method: 'DELETE',
+    }),
+};
+
+// Endpoints de Perfil
+export const perfilApi = {
+  list: (idCorporacao) =>
+    request(`/perfil/listPerfilByCorporacao?idCorporacao=${idCorporacao}`),
+
+  create: (data) =>
+    request('/perfil/createPerfil', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  update: (data) =>
+    request('/perfil/updatePerfil', {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+
+  delete: (idPerfil, idCorporacao) =>
+    request(`/perfil/deletePerfil?idPerfil=${idPerfil}&idCorporacao=${idCorporacao}`, {
+      method: 'DELETE',
+    }),
+};
+
+// Endpoints de Permissão
+export const permissaoApi = {
+  list: () => request('/permissao/listPermissao'),
+};
+
+// Endpoints de Perfil-Permissão
+export const perfilPermissaoApi = {
+  list: (idPerfil, idCorporacao) =>
+    request(`/perfilPermissao/listPerfilPermissao?idPerfil=${idPerfil}&idCorporacao=${idCorporacao}`),
+
+  assign: (idPerfil, idPermissao, idCorporacao) =>
+    request('/perfilPermissao/assignPerfilPermissao', {
+      method: 'POST',
+      body: JSON.stringify({ idPerfil, idPermissao, idCorporacao }),
+    }),
+
+  remove: (idPerfil, idPermissao, idCorporacao) =>
+    request(`/perfilPermissao/removePerfilPermissao?idPerfil=${idPerfil}&idPermissao=${idPermissao}&idCorporacao=${idCorporacao}`, {
+      method: 'DELETE',
+    }),
+};
+
+// Endpoints de Corporação
+export const corporacaoApi = {
+  list: () =>
+    request('/corporacao/listCorporacao'),
+
+  get: (idCorporacao) =>
+    request(`/corporacao/getCorporacao?idCorporacao=${idCorporacao}`),
+
+  create: (data) =>
+    request('/corporacao/createCorporacao', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    }),
+
+  update: (data) =>
+    request('/corporacao/updateCorporacao', {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    }),
+
+  delete: (idCorporacao) =>
+    request(`/corporacao/deleteCorporacao?idCorporacao=${idCorporacao}`, {
+      method: 'DELETE',
+    }),
+};
+
+// ── Occurrence API (porta 3002) ───────────────────────────────────────────────
+
+export const ocorrenciaApi = {
+  estatisticas: (idCorporacao) =>
+    occ(`/ocorrencia/obterEstatisticasOcorrenciaCorporacao?idCorporacao=${idCorporacao}`),
+
+  list: (idCorporacao) =>
+    occ(`/ocorrencia/listOcorrenciaByCorporacao?idCorporacao=${idCorporacao}`),
+
+  get: (idOcorrencia) =>
+    occ(`/ocorrencia/getOcorrencia?idOcorrencia=${idOcorrencia}`),
+
+  create: (data) =>
+    occ('/ocorrencia/createOcorrencia', { method: 'POST', body: JSON.stringify(data) }),
+
+  update: (data) =>
+    occ('/ocorrencia/updateOcorrencia', { method: 'PUT', body: JSON.stringify(data) }),
+
+  delete: (idOcorrencia) =>
+    occ(`/ocorrencia/deleteOcorrencia?idOcorrencia=${idOcorrencia}`, { method: 'DELETE' }),
+
+  validar: (idOcorrencia) =>
+    occ('/ocorrencia/validarOcorrencia', { method: 'PATCH', body: JSON.stringify({ idOcorrencia }) }),
+
+  arquivar: (idOcorrencia) =>
+    occ('/ocorrencia/arquivarOcorrencia', { method: 'PATCH', body: JSON.stringify({ idOcorrencia }) }),
+
+  invalidar: (idOcorrencia) =>
+    occ('/ocorrencia/invalidarOcorrencia', { method: 'PATCH', body: JSON.stringify({ idOcorrencia }) }),
+
+  resubmeter: (idOcorrencia) =>
+    occ('/ocorrencia/resubmeterOcorrencia', { method: 'PATCH', body: JSON.stringify({ idOcorrencia }) }),
+
+  revalidar: (idOcorrencia) =>
+    occ('/ocorrencia/revalidarOcorrencia', { method: 'PATCH', body: JSON.stringify({ idOcorrencia }) }),
+};
+
+export const produtoApi = {
+  estatisticas: (idCorporacao) =>
+    inv(`/produto/obterEstatisticasProdutoCorporacao?idCorporacao=${idCorporacao}`),
+
+  list: (idCorporacao) =>
+    inv(`/produto/listProdutoByCorporacao?idCorporacao=${idCorporacao}`),
+
+  get: (idProduto) =>
+    inv(`/produto/getProduto?idProduto=${idProduto}`),
+
+  create: (data) =>
+    inv('/produto/createProduto', { method: 'POST', body: JSON.stringify(data) }),
+
+  update: (data) =>
+    inv('/produto/updateProduto', { method: 'PUT', body: JSON.stringify(data) }),
+
+  delete: (idProduto) =>
+    inv(`/produto/deleteProduto?idProduto=${idProduto}`, { method: 'DELETE' }),
+};
+
+export const patrimonioApi = {
+  estatisticas: (idCorporacao) =>
+    inv(`/patrimonio/obterEstatisticasPatrimonioCorporacao?idCorporacao=${idCorporacao}`),
+
+  list: (idCorporacao) =>
+    inv(`/patrimonio/listPatrimonioByCorporacao?idCorporacao=${idCorporacao}`),
+
+  get: (idPatrimonio) =>
+    inv(`/patrimonio/getPatrimonio?idPatrimonio=${idPatrimonio}`),
+
+  create: (data) =>
+    inv('/patrimonio/createPatrimonio', { method: 'POST', body: JSON.stringify(data) }),
+
+  update: (data) =>
+    inv('/patrimonio/updatePatrimonio', { method: 'PUT', body: JSON.stringify(data) }),
+
+  delete: (idPatrimonio) =>
+    inv(`/patrimonio/deletePatrimonio?idPatrimonio=${idPatrimonio}`, { method: 'DELETE' }),
+};
+
+export const doacaoApi = {
+  estatisticas: (idCorporacao) =>
+    inv(`/doacao/obterEstatisticasDoacaoCorporacao?idCorporacao=${idCorporacao}`),
+
+  list: (idCorporacao) =>
+    inv(`/doacao/listDoacaoByCorporacao?idCorporacao=${idCorporacao}`),
+
+  get: (idDoacao) =>
+    inv(`/doacao/getDoacao?idDoacao=${idDoacao}`),
+
+  create: (data) =>
+    inv('/doacao/createDoacao', { method: 'POST', body: JSON.stringify(data) }),
+
+  update: (data) =>
+    inv('/doacao/updateDoacao', { method: 'PUT', body: JSON.stringify(data) }),
+
+  delete: (idDoacao) =>
+    inv(`/doacao/deleteDoacao?idDoacao=${idDoacao}`, { method: 'DELETE' }),
+};
+
+export const movimentoEstoqueApi = {
+  listByProduto: (idProduto) =>
+    inv(`/movimentoEstoque/listByProduto?idProduto=${idProduto}`),
+
+  saldo: (idProduto) =>
+    inv(`/movimentoEstoque/saldo?idProduto=${idProduto}`),
+
+  create: (data) =>
+    inv('/movimentoEstoque/createMovimento', { method: 'POST', body: JSON.stringify(data) }),
+
+  delete: (idMovimentoEstoque) =>
+    inv(`/movimentoEstoque/deleteMovimento?idMovimentoEstoque=${idMovimentoEstoque}`, { method: 'DELETE' }),
+};
+
+export const vitimaApi = {
+  list: (idOcorrencia) =>
+    occ(`/vitima/listVitimaByOcorrencia?idOcorrencia=${idOcorrencia}`),
+
+  create: (data) =>
+    occ('/vitima/createVitima', { method: 'POST', body: JSON.stringify(data) }),
+
+  update: (data) =>
+    occ('/vitima/updateVitima', { method: 'PUT', body: JSON.stringify(data) }),
+
+  delete: (idVitima) =>
+    occ(`/vitima/deleteVitima?idVitima=${idVitima}`, { method: 'DELETE' }),
+};
+
+export const hospitalApi = {
+  list: (idCorporacao) =>
+    occ(`/hospital/listHospitalByCorporacao?idCorporacao=${idCorporacao}`),
+
+  create: (data) =>
+    occ('/hospital/createHospital', { method: 'POST', body: JSON.stringify(data) }),
+
+  update: (data) =>
+    occ('/hospital/updateHospital', { method: 'PUT', body: JSON.stringify(data) }),
+
+  delete: (idHospital) =>
+    occ(`/hospital/deleteHospital?idHospital=${idHospital}`, { method: 'DELETE' }),
+};
+
+export const veiculoOcorrenciaApi = {
+  list: (idOcorrencia) =>
+    occ(`/veiculoOcorrencia/listByOcorrencia?idOcorrencia=${idOcorrencia}`),
+
+  create: (data) =>
+    occ('/veiculoOcorrencia/createVeiculo', { method: 'POST', body: JSON.stringify(data) }),
+
+  update: (data) =>
+    occ('/veiculoOcorrencia/updateVeiculo', { method: 'PUT', body: JSON.stringify(data) }),
+
+  delete: (idVeiculoOcorrencia) =>
+    occ(`/veiculoOcorrencia/deleteVeiculo?idVeiculoOcorrencia=${idVeiculoOcorrencia}`, { method: 'DELETE' }),
+};

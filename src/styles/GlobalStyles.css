@@ -1,0 +1,9 @@
+/* GlobalStyles.css — substituido pela arquitetura em camadas.
+   Os estilos foram divididos em:
+   - tokens.css    : variaveis CSS
+   - base.css      : reset, body, layout, utilitarios
+   - components.css: classes reutilizaveis compartilhadas
+   - dark-mode.css : todos os overrides de dark mode
+
+   Importados diretamente em src/index.js.
+   Este arquivo esta mantido apenas como referencia historica. */

@@ -1,0 +1,39 @@
+/* src/pages/Doacoes/Doacoes.css
+   Apenas estilos exclusivos desta pagina.
+   Compartilhados: components.css | Dark mode: dark-mode.css */
+
+/* --- ICONES KPI (cores semanticas de Doacoes) --- */
+.kpi-icon.money    { background-color: #ecfdf5; color: #059669; }
+.kpi-icon.material { background-color: #eff6ff; color: #2563eb; }
+.kpi-icon.service  { background-color: #f3e8ff; color: #7e22ce; }
+
+/* --- BADGE DE TIPO DE DOACAO --- */
+.badge-type { padding: 4px 10px; border-radius: 9999px; font-size: 12px; font-weight: 600; }
+.badge-type.dinheiro { background-color: #ecfdf5; color: #047857; }
+.badge-type.material { background-color: #eff6ff; color: #1d4ed8; }
+.badge-type.servico,
+.badge-type.servico  { background-color: #f3e8ff; color: #6b21a8; }
+
+/* --- HEADER DE ACOES --- */
+.btn-icon-help { background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 20px; transition: color 0.2s; }
+.btn-icon-help:hover { color: #007bff; }
+
+/* --- INPUT DE MOEDA --- */
+.currency-input-group { position: relative; display: flex; align-items: center; }
+.currency-prefix { position: absolute; left: 12px; color: #64748b; pointer-events: none; }
+.currency-input-group input { padding-left: 36px; }
+
+/* --- CHIP ATIVO (vermelho da marca para Doacoes) --- */
+.chip-option.active {
+    background-color: #d32f2f;
+    border-color: #d32f2f;
+    color: #ffffff;
+    font-weight: 600;
+    box-shadow: 0 4px 6px -1px rgba(211, 47, 47, 0.4);
+    transform: translateY(-1px);
+}
+
+/* --- FORM GRID (2 colunas fixas para formulario) --- */
+.form-grid {
+    grid-template-columns: repeat(2, 1fr);
+}

@@ -1,0 +1,153 @@
+/* --- Card de Estatísticas --- */
+.stat-card {
+    background-color: var(--cor-painel);
+    padding: 24px;
+    border-radius: 12px;
+    box-shadow: var(--sombra-padrao);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border-left: 4px solid;
+    /* A cor da borda é definida pela variável CSS no GlobalStyles */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.stat-card.pendente {
+    border-color: var(--cor-pendente);
+}
+
+.stat-card.arquivado {
+    border-color: var(--cor-arquivado);
+}
+
+.stat-card.validado {
+    border-color: var(--cor-validado);
+}
+
+.stat-card.rascunho {
+    border-color: var(--cor-rascunho);
+}
+
+.stat-card .icon {
+    font-size: 24px;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+.stat-card .icon.pendente {
+    color: var(--cor-pendente);
+    background-color: #fffbeb;
+}
+
+.stat-card .icon.arquivado {
+    color: var(--cor-arquivado);
+    background-color: #f0fdf4;
+}
+
+.stat-card .icon.validado {
+    color: var(--cor-validado);
+    background-color: #eff6ff;
+}
+
+.stat-card .icon.rascunho {
+    color: var(--cor-rascunho);
+    background-color: #f3f4f6;
+}
+
+.stat-card .info h3 {
+    font-size: 36px;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1;
+}
+
+.stat-card .info p {
+    color: var(--cor-texto-secundario);
+    margin: 4px 0 0;
+    font-weight: 500;
+}
+
+/* --- Dark Mode Overrides for StatCard --- */
+body.dark-mode .stat-card {
+    background-color: #1e293b;
+    /* Slate 800 */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    /* Darker shadow */
+}
+
+body.dark-mode .stat-card .info p {
+    color: #cbd5e1;
+    /* Slate 300 for labels */
+}
+
+/* Ensure Icons have correct backgrounds in dark mode if needed, 
+   currently they use fixed hex like #f0fdf4 which might be too bright. 
+   Let's darken them slightly for comfort */
+body.dark-mode .stat-card .icon.pendente {
+    background-color: #451a03;
+    color: #fbbf24;
+}
+
+body.dark-mode .stat-card .icon.arquivado {
+    background-color: #052e16;
+    color: #4ade80;
+}
+
+body.dark-mode .stat-card .icon.validado {
+    background-color: #172554;
+    color: #60a5fa;
+}
+
+body.dark-mode .stat-card .icon.rascunho {
+    background-color: #374151;
+    color: #e5e7eb;
+}
+
+/* --- Grade de Estatísticas --- */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+    margin-bottom: 32px;
+}
+/* --- TREND E EMPTY STATE --- */
+.stat-empty {
+    font-size: 11px;
+    color: var(--cor-texto-secundario);
+    margin-top: 4px;
+    font-style: italic;
+}
+
+.stat-trend {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    margin-top: 6px;
+    padding: 2px 8px;
+    border-radius: 9999px;
+}
+
+.stat-trend.up   { background-color: #f0fdf4; color: #16a34a; }
+.stat-trend.down { background-color: #fef2f2; color: #dc2626; }
+
+body.dark-mode .stat-trend.up   { background-color: #052e16; color: #4ade80; }
+body.dark-mode .stat-trend.down { background-color: #450a0a; color: #fca5a5; }
+body.dark-mode .stat-empty      { color: #475569; }
+
+/* Stat card vazio no dark — visualmente diferenciado */
+body.dark-mode .stat-card:has(.stat-empty) {
+    opacity: 0.65;
+    border-left-color: #334155;
+}
+body.dark-mode .stat-card:has(.stat-empty) .info h3 {
+    color: #475569;
+    font-size: 28px;
+}

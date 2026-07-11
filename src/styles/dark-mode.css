@@ -1,0 +1,590 @@
+/* =========================================================
+   DARK MODE — Todos os overrides em um único lugar
+   As variáveis de cor já são trocadas em tokens.css.
+   Este arquivo lida com elementos que precisam de ajuste
+   além das variáveis (backgrounds fixos, sombras, etc.).
+   ========================================================= */
+
+
+/* =========================================================
+   COMPONENTES COMPARTILHADOS
+   ========================================================= */
+
+/* Painéis e cards */
+body.dark-mode .panel,
+body.dark-mode .card,
+body.dark-mode .modal-content,
+body.dark-mode .kpi-card,
+body.dark-mode .type-card {
+    background-color: var(--cor-painel);
+    border-color: var(--cor-borda);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+/* Inputs, selects e textareas */
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea,
+body.dark-mode .search-input input,
+body.dark-mode .form-group input,
+body.dark-mode .form-group select,
+body.dark-mode .form-group textarea,
+body.dark-mode .filter-select {
+    background-color: var(--cor-painel);
+    border-color: var(--cor-borda);
+    color: var(--cor-texto-principal);
+}
+
+/* Tabela base (.data-table) */
+body.dark-mode .data-table,
+body.dark-mode .modern-table {
+    background-color: var(--cor-painel);
+    color: var(--cor-texto-principal);
+    border-color: var(--cor-borda);
+}
+
+body.dark-mode .data-table th,
+body.dark-mode .modern-table th {
+    background-color: #0f172a;
+    color: #e2e8f0;
+    border-bottom: 2px solid #334155;
+    letter-spacing: 0.04em;
+}
+
+body.dark-mode .data-table td,
+body.dark-mode .modern-table td {
+    background-color: var(--cor-painel);
+    border-bottom-color: var(--cor-borda);
+    color: var(--cor-texto-principal);
+}
+
+body.dark-mode .data-table tr,
+body.dark-mode .modern-table tr {
+    background-color: transparent;
+}
+
+body.dark-mode .data-table tr:nth-child(even),
+body.dark-mode .modern-table tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+body.dark-mode .data-table tr:hover,
+body.dark-mode .data-table tbody tr:hover,
+body.dark-mode .modern-table tbody tr:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+body.dark-mode .modern-table thead tr {
+    background-color: #0f172a;
+    border-bottom-color: var(--cor-borda);
+}
+
+/* Paginação */
+body.dark-mode .pagination {
+    border-top-color: var(--cor-borda);
+}
+
+body.dark-mode .pagination-controls button {
+    background-color: var(--cor-painel);
+    border-color: var(--cor-borda);
+    color: #cbd5e1;
+}
+
+body.dark-mode .pagination-controls button:hover {
+    background-color: #334155;
+}
+
+/* Cabeçalhos e rodapés de formulário */
+body.dark-mode .form-panel-header,
+body.dark-mode .form-panel-footer {
+    border-color: var(--cor-borda);
+}
+
+/* Chips */
+body.dark-mode .chip-option {
+    background-color: var(--cor-painel);
+    border-color: var(--cor-borda);
+    color: #cbd5e1;
+}
+
+body.dark-mode .chip-option:hover {
+    background-color: #334155;
+}
+
+/* Botões de contorno */
+body.dark-mode .btn-outline {
+    border-color: #475569;
+    color: #cbd5e1;
+}
+
+body.dark-mode .btn-outline:hover {
+    background-color: #334155;
+    color: #ffffff;
+    border-color: #64748b;
+}
+
+body.dark-mode .btn-outline-secondary {
+    border-color: #475569;
+    color: #cbd5e1;
+}
+
+body.dark-mode .btn-outline-secondary:hover {
+    background-color: #334155;
+    color: #ffffff;
+}
+
+/* Botão secundário */
+body.dark-mode .btn-secondary {
+    background-color: #334155;
+    color: var(--cor-texto-principal);
+    border-color: var(--cor-borda);
+}
+
+body.dark-mode .btn-secondary:hover {
+    background-color: #475569;
+}
+
+/* Status badges */
+body.dark-mode .status-badge {
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .status-badge.rascunho {
+    background-color: #374151;
+    color: #d1d5db;
+}
+
+body.dark-mode .status-badge.pendente {
+    background-color: rgba(245, 158, 11, 0.2);
+    color: #fbbf24;
+}
+
+body.dark-mode .status-badge.concluido,
+body.dark-mode .status-badge.arquivado,
+body.dark-mode .status-badge.ativo {
+    background-color: rgba(16, 185, 129, 0.2);
+    color: #4ade80;
+}
+
+body.dark-mode .status-badge.validado {
+    background-color: rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+}
+
+body.dark-mode .status-badge.inativo,
+body.dark-mode .status-badge.baixado {
+    background-color: transparent;
+    border: 1px solid #64748b;
+    color: #94a3b8;
+    box-shadow: none;
+}
+
+/* Dropdown */
+body.dark-mode .dropdown-menu {
+    background: var(--cor-painel);
+    border-color: var(--cor-borda);
+}
+
+body.dark-mode .dropdown-item {
+    color: #cbd5e1;
+}
+
+body.dark-mode .dropdown-item:hover {
+    background-color: #334155;
+    color: var(--cor-texto-principal);
+}
+
+body.dark-mode .dropdown-item.active {
+    background-color: #334155;
+}
+
+/* KPI */
+body.dark-mode .kpi-value {
+    color: var(--cor-texto-principal);
+}
+
+body.dark-mode .kpi-label {
+    color: #94a3b8;
+}
+
+/* Scrollbar */
+body.dark-mode ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+body.dark-mode ::-webkit-scrollbar-track {
+    background: #0f172a;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 4px;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+}
+
+
+/* =========================================================
+   MOBILE TOPBAR
+   ========================================================= */
+body.dark-mode .mobile-topbar {
+    background-color: var(--cor-painel);
+    border-bottom-color: var(--cor-borda);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+body.dark-mode .mobile-menu-btn {
+    color: var(--cor-texto-principal);
+}
+
+body.dark-mode .mobile-menu-btn:hover {
+    background-color: #334155;
+}
+
+body.dark-mode .activity-divider {
+    background-color: #334155;
+}
+
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+body.dark-mode .sidebar-nav li a.active-link {
+    background-color: rgba(211, 47, 47, 0.15);
+}
+
+
+/* =========================================================
+   STAT CARD (Dashboard)
+   ========================================================= */
+body.dark-mode .stat-card {
+    background-color: var(--cor-painel);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .stat-card .info p {
+    color: #cbd5e1;
+}
+
+body.dark-mode .stat-card .icon.pendente {
+    background-color: #451a03;
+    color: #fbbf24;
+}
+
+body.dark-mode .stat-card .icon.arquivado {
+    background-color: #052e16;
+    color: #4ade80;
+}
+
+body.dark-mode .stat-card .icon.validado {
+    background-color: #172554;
+    color: #60a5fa;
+}
+
+body.dark-mode .stat-card .icon.rascunho {
+    background-color: #374151;
+    color: #e5e7eb;
+}
+
+
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+
+body.dark-mode .priorities-header {
+    border-bottom-color: var(--cor-borda);
+}
+
+body.dark-mode .row-urgente td {
+    background-color: rgba(239, 68, 68, 0.08);
+    border-bottom-color: rgba(239, 68, 68, 0.2);
+}
+
+body.dark-mode .activity-icon--success { background-color: rgba(16, 185, 129, 0.18); color: #34d399; }
+body.dark-mode .activity-icon--info    { background-color: rgba(59, 130, 246, 0.18); color: #60a5fa; }
+body.dark-mode .activity-icon--neutral { background-color: rgba(100, 116, 139, 0.2);  color: #94a3b8; }
+
+
+body.dark-mode .priorities-section,
+body.dark-mode .charts-section {
+    background-color: var(--cor-painel);
+    border-color: var(--cor-borda);
+}
+
+body.dark-mode .chart-title {
+    color: var(--cor-texto-principal);
+}
+
+body.dark-mode .recent-activity-item {
+    border-bottom-color: var(--cor-borda);
+}
+
+body.dark-mode .activity-text {
+    color: var(--cor-texto-principal);
+}
+
+body.dark-mode .activity-time {
+    color: #94a3b8;
+}
+
+body.dark-mode .activity-icon {
+    background-color: #334155;
+    color: #cbd5e1;
+}
+
+
+/* =========================================================
+   OCORRÊNCIAS (Tabs, Modal, Stepper, Toggle Cards)
+   ========================================================= */
+
+/* Abas */
+body.dark-mode .tabs {
+    background-color: #0f172a;
+    border-bottom-color: var(--cor-borda);
+}
+
+body.dark-mode .tab-link {
+    color: #94a3b8;
+}
+
+body.dark-mode .tab-link:hover {
+    color: var(--cor-texto-principal);
+}
+
+/* Modal */
+body.dark-mode .modal-header {
+    border-bottom-color: var(--cor-borda);
+}
+
+body.dark-mode .close-modal-btn {
+    color: var(--cor-texto-secundario);
+}
+
+body.dark-mode .close-modal-btn:hover {
+    color: var(--cor-texto-principal);
+}
+
+body.dark-mode .form-panel-modal {
+    background-color: var(--cor-painel);
+    border-color: var(--cor-borda);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+}
+
+/* Stepper */
+body.dark-mode .stepper::before {
+    background-color: var(--cor-borda);
+}
+
+body.dark-mode .stepper-number {
+    background-color: var(--cor-painel);
+    border-color: #475569;
+    color: #94a3b8;
+}
+
+body.dark-mode .stepper-item.active .stepper-number {
+    background-color: var(--cor-painel);
+    border-color: var(--cor-primaria);
+    color: var(--cor-primaria);
+}
+
+body.dark-mode .stepper-title {
+    color: #94a3b8;
+}
+
+body.dark-mode .stepper-item.active .stepper-title {
+    color: var(--cor-primaria);
+}
+
+/* Section Header */
+body.dark-mode .section-header {
+    background-color: #0f172a;
+    color: var(--cor-texto-principal);
+}
+
+/* Toggle Cards */
+body.dark-mode .toggle-card {
+    background-color: var(--cor-painel);
+    border-color: var(--cor-borda);
+    color: #cbd5e1;
+}
+
+body.dark-mode .toggle-card:hover {
+    background-color: #334155;
+}
+
+body.dark-mode .toggle-card.selected {
+    background-color: #450a0a;
+    border-color: #ef4444;
+    color: #fca5a5;
+}
+
+/* Type Cards */
+body.dark-mode .type-card:hover {
+    background-color: #334155;
+    border-color: #ef4444;
+}
+
+body.dark-mode .type-card.selected {
+    background-color: #450a0a;
+    border-color: #ef4444;
+}
+
+/* Status Pills */
+body.dark-mode .status-pill.pendente {
+    background-color: rgba(245, 158, 11, 0.2);
+    color: #fbbf24;
+}
+
+body.dark-mode .status-pill.urgente {
+    background-color: rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+}
+
+body.dark-mode .status-pill.em-andamento {
+    background-color: rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+}
+
+body.dark-mode .status-pill.concluido {
+    background-color: rgba(16, 185, 129, 0.2);
+    color: #4ade80;
+}
+
+body.dark-mode .status-pill.cancelado {
+    background-color: rgba(100, 116, 139, 0.2);
+    color: #94a3b8;
+}
+
+/* Filtros específicos de Ocorrências */
+body.dark-mode .search-input-flex input {
+    background-color: var(--cor-painel);
+    border-color: var(--cor-borda);
+    color: var(--cor-texto-principal);
+}
+
+
+/* =========================================================
+   PRODUTOS — Ícones KPI específicos
+   ========================================================= */
+body.dark-mode .kpi-icon.products {
+    background-color: rgba(37, 99, 235, 0.2);
+    color: #60a5fa;
+}
+
+body.dark-mode .kpi-icon.active {
+    background-color: rgba(5, 150, 105, 0.2);
+    color: #34d399;
+}
+
+body.dark-mode .kpi-icon.alert {
+    background-color: rgba(234, 88, 12, 0.2);
+    color: #fbbf24;
+}
+
+body.dark-mode .chip-option.active-blue {
+    background-color: #1d4ed8;
+    border-color: #3b82f6;
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   PATRIMONIAL — Ícones KPI específicos
+   ========================================================= */
+body.dark-mode .kpi-icon.assets {
+    background-color: rgba(124, 58, 237, 0.2);
+    color: #a78bfa;
+}
+
+body.dark-mode .kpi-icon.value {
+    background-color: rgba(5, 150, 105, 0.2);
+    color: #34d399;
+}
+
+body.dark-mode .chip-option.active-violet {
+    background-color: #6d28d9;
+    border-color: #8b5cf6;
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   DOAÇÕES — Ícones KPI e badges específicos
+   ========================================================= */
+body.dark-mode .kpi-icon.money {
+    background-color: rgba(5, 150, 105, 0.2);
+    color: #34d399;
+}
+
+body.dark-mode .kpi-icon.material {
+    background-color: rgba(37, 99, 235, 0.2);
+    color: #60a5fa;
+}
+
+body.dark-mode .kpi-icon.service {
+    background-color: rgba(124, 58, 237, 0.2);
+    color: #c084fc;
+}
+
+body.dark-mode .badge-type.dinheiro {
+    background-color: #064e3b;
+    color: #4ade80;
+}
+
+body.dark-mode .badge-type.material {
+    background-color: #172554;
+    color: #60a5fa;
+}
+
+body.dark-mode .badge-type.serviço,
+body.dark-mode .badge-type.servico {
+    background-color: #581c87;
+    color: #d8b4fe;
+}
+
+body.dark-mode .chip-option.active-red {
+    background-color: #991b1b;
+    border-color: #ef4444;
+    color: #ffffff;
+}
+
+body.dark-mode .currency-prefix {
+    color: #94a3b8;
+}
+
+
+/* =========================================================
+   KPI ICON — Ocorrências
+   ========================================================= */
+body.dark-mode .kpi-icon.urgent {
+    background-color: rgba(239, 68, 68, 0.2);
+    color: #fca5a5;
+}
+
+body.dark-mode .kpi-icon.progress {
+    background-color: rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+}
+
+body.dark-mode .kpi-icon.archived {
+    background-color: rgba(22, 163, 74, 0.2);
+    color: #4ade80;
+}
+
+body.dark-mode .kpi-icon.pending {
+    background-color: rgba(234, 88, 12, 0.2);
+    color: #fb923c;
+}
+
+body.dark-mode .kpi-icon.pend-arq {
+    background-color: rgba(124, 58, 237, 0.2);
+    color: #a78bfa;
+}
+
+body.dark-mode .kpi-icon.total {
+    background-color: rgba(100, 116, 139, 0.2);
+    color: #94a3b8;
+}

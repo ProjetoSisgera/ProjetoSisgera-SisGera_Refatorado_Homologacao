@@ -1,0 +1,48 @@
+/* =========================================================
+   DESIGN TOKENS — Variáveis CSS do SisGera
+   Única fonte de verdade para cores, sombras e efeitos.
+   ========================================================= */
+
+:root {
+    /* --- Marca --- */
+    --cor-primaria: #D32F2F;
+
+    /* --- Superfícies --- */
+    --cor-fundo: #f4f7fa;
+    --cor-painel: #ffffff;
+
+    /* --- Tipografia --- */
+    --cor-texto-principal: #2d3748;
+    --cor-texto-secundario: #718096;
+
+    /* --- Bordas --- */
+    --cor-borda: #e2e8f0;
+
+    /* --- Status --- */
+    --cor-pendente: #f59e0b;
+    --cor-arquivado: #10b981;
+    --cor-validado: #3b82f6;
+    --cor-rascunho: #9ca3af;
+    --cor-ativo: #10b981;
+    --cor-urgente-bg: #fee2e2;
+    --cor-urgente-text: #991b1b;
+
+    /* --- Stepper --- */
+    --cor-stepper-ativa: #D32F2F;
+    --cor-stepper-completa: #10b981;
+    --cor-stepper-inativa: #cbd5e1;
+
+    /* --- Efeitos --- */
+    --sombra-padrao: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+/* --- Dark Mode: substituição das variáveis --- */
+body.dark-mode {
+    --cor-fundo: #0f172a;
+    --cor-painel: #1e293b;
+    --cor-texto-principal: #f8fafc;
+    --cor-texto-secundario: #cbd5e1;
+    --cor-borda: #334155;
+    --cor-urgente-bg: #450a0a;
+    --cor-urgente-text: #fca5a5;
+}

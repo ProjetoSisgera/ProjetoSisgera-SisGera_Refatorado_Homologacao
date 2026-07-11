@@ -1,0 +1,29 @@
+/* src/pages/Patrimonial/Patrimonial.css
+   Apenas estilos exclusivos desta pagina.
+   Compartilhados: components.css | Dark mode: dark-mode.css */
+
+/* --- ICONES KPI (cores semanticas de Patrimonial) --- */
+.kpi-icon.assets { background-color: #ede9fe; color: #7c3aed; }
+.kpi-icon.value  { background-color: #ecfdf5; color: #059669; }
+.kpi-icon.alert  { background-color: #fff7ed; color: #ea580c; }
+
+/* --- CHIP ATIVO (violeta para Patrimonial) --- */
+.chip-option.active {
+    background-color: #7c3aed;
+    border-color: #7c3aed;
+    color: #ffffff;
+    font-weight: 600;
+    box-shadow: 0 4px 6px -1px rgba(124, 58, 237, 0.4);
+    transform: translateY(-1px);
+}
+
+/* --- STATUS BADGE adicional --- */
+.status-badge.em-manutencao {
+    background-color: #fff7ed;
+    color: #c2410c;
+}
+
+/* --- FORM GRID (2 colunas fixas para formulario de cadastro) --- */
+.form-grid {
+    grid-template-columns: repeat(2, 1fr);
+}
