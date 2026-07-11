@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { produtoApi, movimentoEstoqueApi } from '../../services/api';
+import CurrencyInput from '../../components/CurrencyInput/CurrencyInput';
 import './Produtos.css';
 
 const UNIDADES = [
@@ -189,14 +190,10 @@ const CadastrarProduto = () => {
 
                             <div className={fg('precoUnitario')}>
                                 <label htmlFor="product-price">Preço Unitário (R$)</label>
-                                <input
-                                    type="number"
+                                <CurrencyInput
                                     id="product-price"
-                                    step="0.01"
-                                    min={0}
-                                    placeholder="Ex: 18.98"
                                     value={form.precoUnitario}
-                                    onChange={e => handleChange('precoUnitario', e.target.value)}
+                                    onChange={val => handleChange('precoUnitario', val)}
                                 />
                                 {errosCampo.precoUnitario && <span className="field-error-msg">{errosCampo.precoUnitario}</span>}
                             </div>

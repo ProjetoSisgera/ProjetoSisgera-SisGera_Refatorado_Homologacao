@@ -18,11 +18,6 @@
 .btn-icon-help { background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 20px; transition: color 0.2s; }
 .btn-icon-help:hover { color: #007bff; }
 
-/* --- INPUT DE MOEDA --- */
-.currency-input-group { position: relative; display: flex; align-items: center; }
-.currency-prefix { position: absolute; left: 12px; color: #64748b; pointer-events: none; }
-.currency-input-group input { padding-left: 36px; }
-
 /* --- CHIP ATIVO (vermelho da marca para Doacoes) --- */
 .chip-option.active {
     background-color: #d32f2f;

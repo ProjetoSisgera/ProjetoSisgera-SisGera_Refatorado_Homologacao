@@ -762,3 +762,11 @@ body.dark-mode .modal-close-btn:hover {
         transform: translateY(0);
     }
 }
+
+
+/* =========================================================
+   INPUT DE MOEDA (.currency-input-group)
+   ========================================================= */
+.currency-input-group { position: relative; display: flex; align-items: center; }
+.currency-prefix { position: absolute; left: 12px; color: #64748b; pointer-events: none; }
+.currency-input-group input { padding-left: 36px; }

@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { doacaoApi } from '../../services/api';
+import CurrencyInput from '../../components/CurrencyInput/CurrencyInput';
 import './Doacoes.css';
 
 // idTipoDoacao: 1=Dinheiro, 2=Material, 3=Serviço
@@ -150,18 +151,12 @@ const IncluirDoacao = () => {
                             {isDinheiro && (
                                 <div className="form-group">
                                     <label htmlFor="value">Valor da Doação (R$)*</label>
-                                    <div className="currency-input-group">
-                                        <span className="currency-prefix">R$</span>
-                                        <input
-                                            type="number"
-                                            id="value"
-                                            step="0.01"
-                                            placeholder="0,00"
-                                            required
-                                            value={form.valor}
-                                            onChange={e => handleChange('valor', e.target.value)}
-                                        />
-                                    </div>
+                                    <CurrencyInput
+                                        id="value"
+                                        required
+                                        value={form.valor}
+                                        onChange={val => handleChange('valor', val)}
+                                    />
                                 </div>
                             )}
 

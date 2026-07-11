@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { patrimonioApi } from '../../services/api';
+import CurrencyInput from '../../components/CurrencyInput/CurrencyInput';
 import './Patrimonial.css';
 
 const CadastrarPatrimonio = () => {
@@ -77,13 +78,10 @@ const CadastrarPatrimonio = () => {
 
                             <div className="form-group">
                                 <label htmlFor="asset-value">Valor (R$)</label>
-                                <input
-                                    type="number"
+                                <CurrencyInput
                                     id="asset-value"
-                                    step="0.01"
-                                    placeholder="Ex: 4500.00"
                                     value={form.valor}
-                                    onChange={e => handleChange('valor', e.target.value)}
+                                    onChange={val => handleChange('valor', val)}
                                 />
                             </div>
 
