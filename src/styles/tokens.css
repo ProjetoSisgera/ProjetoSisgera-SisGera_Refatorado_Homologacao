@@ -6,6 +6,7 @@
 :root {
     /* --- Marca --- */
     --cor-primaria: #D32F2F;
+    --cor-primaria-texto: #c62828; /* variante mais escura p/ texto sobre fundos rosados claros (contraste AA) */
 
     /* --- Superfícies --- */
     --cor-fundo: #f4f7fa;
@@ -38,6 +39,7 @@
 
 /* --- Dark Mode: substituição das variáveis --- */
 body.dark-mode {
+    --cor-primaria-texto: #D32F2F; /* no escuro o fundo já é escuro; mantém o vermelho original */
     --cor-fundo: #0f172a;
     --cor-painel: #1e293b;
     --cor-texto-principal: #f8fafc;

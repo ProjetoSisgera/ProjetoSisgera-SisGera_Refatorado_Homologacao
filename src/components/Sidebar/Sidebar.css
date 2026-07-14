@@ -46,7 +46,7 @@
 .sidebar-context-badge--corp {
     cursor: pointer;
     background: rgba(211, 47, 47, 0.08);
-    color: var(--cor-primaria);
+    color: var(--cor-primaria-texto);
     border: 1px solid rgba(211, 47, 47, 0.18);
     transition: background 0.2s, border-color 0.2s;
 }
@@ -81,7 +81,6 @@
 .sidebar-context-badge__text small {
     font-size: 10px;
     font-weight: 500;
-    opacity: 0.75;
     display: block;
 }
 
@@ -209,7 +208,7 @@ body.dark-mode .sidebar-context-badge--corp:hover {
 .sidebar-nav li a.active-link {
     /* Classe que será aplicada pelo NavLink quando a rota for ativa */
     background-color: #ffebee;
-    color: var(--cor-primaria);
+    color: var(--cor-primaria-texto);
     font-weight: 600;
 }
 
@@ -221,7 +220,6 @@ body.dark-mode .sidebar-context-badge--corp:hover {
     letter-spacing: 0.8px;
     color: var(--cor-texto-secundario);
     padding: 12px 24px 4px;
-    opacity: 0.7;
 }
 
 /* --- Área inferior (perfil + logout) --- */
