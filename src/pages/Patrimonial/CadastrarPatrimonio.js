@@ -49,7 +49,7 @@ const CadastrarPatrimonio = () => {
             <div className="form-centered-container">
                 <header className="main-header">
                     <h2>Cadastrar Bem Patrimonial</h2>
-                    <p style={{ color: '#64748b', marginTop: '4px' }}>Registre as informações do novo bem da corporação.</p>
+                    <p style={{ color: '#475569', marginTop: '4px' }}>Registre as informações do novo bem da corporação.</p>
                 </header>
 
                 {error && (

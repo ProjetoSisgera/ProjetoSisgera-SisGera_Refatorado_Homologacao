@@ -61,7 +61,7 @@ const IncluirDoacao = () => {
             <div className="form-centered-container">
                 <header className="main-header">
                     <h2>Cadastrar Nova Doação</h2>
-                    <p style={{ color: '#64748b', marginTop: '4px' }}>Preencha os dados abaixo para registrar uma nova entrada.</p>
+                    <p style={{ color: '#475569', marginTop: '4px' }}>Preencha os dados abaixo para registrar uma nova entrada.</p>
                 </header>
 
                 {error && (

@@ -158,7 +158,7 @@ const CadastrarProduto = () => {
             <div className="form-centered-container">
                 <header className="main-header">
                     <h2>Adicionar Novo Produto</h2>
-                    <p style={{ color: '#64748b', marginTop: '4px' }}>Preencha os dados do novo item para o inventário.</p>
+                    <p style={{ color: '#475569', marginTop: '4px' }}>Preencha os dados do novo item para o inventário.</p>
                 </header>
 
                 {erroGeral && (
@@ -250,7 +250,7 @@ const CadastrarProduto = () => {
                                 <label htmlFor="product-qty">
                                     Quantidade Inicial
                                     {unidadeSelecionada && (
-                                        <span style={{ fontSize: '12px', color: '#64748b', marginLeft: '6px' }}>
+                                        <span style={{ fontSize: '12px', color: '#475569', marginLeft: '6px' }}>
                                             ({unidadeSelecionada})
                                         </span>
                                     )}
@@ -263,7 +263,7 @@ const CadastrarProduto = () => {
                                     value={form.quantidadeInicial}
                                     onChange={e => handleChange('quantidadeInicial', e.target.value)}
                                 />
-                                <span style={{ fontSize: '11px', color: '#94a3b8', marginTop: '4px', display: 'block' }}>
+                                <span style={{ fontSize: '11px', color: '#475569', marginTop: '4px', display: 'block' }}>
                                     Será registrado como Entrada de estoque
                                 </span>
                                 {errosCampo.quantidadeInicial && <span className="field-error-msg">{errosCampo.quantidadeInicial}</span>}

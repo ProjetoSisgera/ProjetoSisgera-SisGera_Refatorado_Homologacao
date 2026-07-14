@@ -115,7 +115,7 @@
   border-bottom: 1px solid var(--cor-borda);
 }
 
-.ac-panel-header h3 {
+.ac-panel-header h2 {
   font-size: 15px;
   font-weight: 600;
   color: var(--cor-texto-principal);

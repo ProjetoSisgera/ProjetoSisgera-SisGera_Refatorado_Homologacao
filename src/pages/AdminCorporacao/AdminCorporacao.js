@@ -201,7 +201,7 @@ export default function AdminCorporacao() {
       {/* Painel Principal */}
       <div className="panel">
         <div className="ac-panel-header">
-          <h3>Lista de Corporações</h3>
+          <h2>Lista de Corporações</h2>
           <button
             className="ac-refresh-btn"
             onClick={loadCorporacoes}
