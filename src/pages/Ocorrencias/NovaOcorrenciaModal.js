@@ -576,7 +576,7 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
             <div className="modal-container" style={{ maxWidth: '900px' }}>
                 <div className="modal-header">
                     <h2>Nova Ocorrência</h2>
-                    <button className="close-modal-btn" onClick={onClose}><FontAwesomeIcon icon="times" /></button>
+                    <button className="close-modal-btn" onClick={onClose} aria-label="Fechar"><FontAwesomeIcon icon="times" /></button>
                 </div>
 
                 <div className="modal-content">
@@ -625,30 +625,30 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
                             <div className={`form-step ${currentStep === 2 ? 'active' : ''}`}>
 
                                 {/* Horários */}
-                                <h4 className="section-header"><FontAwesomeIcon icon="clock" style={{ marginRight: 8 }} />Horários</h4>
+                                <h3 className="section-header"><FontAwesomeIcon icon="clock" style={{ marginRight: 8 }} />Horários</h3>
                                 <div className="form-grid">
                                     <div className="form-group">
-                                        <label>Data da Ocorrência *</label>
+                                        <label htmlFor="data_ocorrencia">Data da Ocorrência *</label>
                                         <input type="date" id="data_ocorrencia" value={formData.data_ocorrencia} onChange={handleChange} required />
                                     </div>
                                     <div className="form-group">
-                                        <label>Hora Transmissão</label>
+                                        <label htmlFor="hora_transmissao">Hora Transmissão</label>
                                         <input type="time" id="hora_transmissao" value={formData.hora_transmissao} onChange={handleChange} />
                                     </div>
                                     <div className="form-group">
-                                        <label>Hora Chegada ao Local</label>
+                                        <label htmlFor="hora_chegada_local">Hora Chegada ao Local</label>
                                         <input type="time" id="hora_chegada_local" value={formData.hora_chegada_local} onChange={handleChange} />
                                     </div>
                                     <div className="form-group">
-                                        <label>Hora Chegada ao Hospital</label>
+                                        <label htmlFor="hora_chegada_hospital">Hora Chegada ao Hospital</label>
                                         <input type="time" id="hora_chegada_hospital" value={formData.hora_chegada_hospital} onChange={handleChange} />
                                     </div>
                                 </div>
 
                                 {/* Origem do chamado */}
-                                <h4 className="section-header" style={{ marginTop: 24 }}>
+                                <h3 className="section-header" style={{ marginTop: 24 }}>
                                     <FontAwesomeIcon icon="headset" style={{ marginRight: 8 }} />Origem do Chamado *
-                                </h4>
+                                </h3>
                                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                                     {ORIGEM_OPTS.map(o => (
                                         <div
@@ -664,7 +664,7 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
                                 </div>
                                 {formData.idTipoOrigemChamado === '5' && (
                                     <div className="form-group" style={{ marginTop: 10 }}>
-                                        <label>Descreva a origem *</label>
+                                        <label htmlFor="origemChamadoOutro">Descreva a origem *</label>
                                         <input
                                             type="text" id="origemChamadoOutro" maxLength={100}
                                             placeholder="Descreva a origem do chamado..."
@@ -676,9 +676,9 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
                                 {/* Sub-tipo — apenas para Simplificado */}
                                 {selectedBoType === 'simplificado' && (
                                     <div style={{ marginTop: 24, padding: '20px', background: '#f8fafc', borderRadius: 10, border: '1px solid #e2e8f0' }}>
-                                        <h4 className="section-header" style={{ marginBottom: 12 }}>
+                                        <h3 className="section-header" style={{ marginBottom: 12 }}>
                                             <FontAwesomeIcon icon="list-check" style={{ marginRight: 8 }} />Sub-tipo da Ocorrência *
-                                        </h4>
+                                        </h3>
                                         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                                             {TIPO_OCC_SIMPLIFICADO.map(t => (
                                                 <div
@@ -694,7 +694,7 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
                                         </div>
                                         {formData.idTipoOcorrenciaSimplificado === '9' && (
                                             <div className="form-group" style={{ marginTop: 12 }}>
-                                                <label>Descreva o tipo *</label>
+                                                <label htmlFor="ocorrenciaSimplificadoOutro">Descreva o tipo *</label>
                                                 <input
                                                     type="text" id="ocorrenciaSimplificadoOutro" maxLength={100}
                                                     placeholder="Descreva o tipo de ocorrência..."
@@ -706,9 +706,9 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
                                 )}
 
                                 {/* Tipo de local */}
-                                <h4 className="section-header" style={{ marginTop: 24 }}>
+                                <h3 className="section-header" style={{ marginTop: 24 }}>
                                     <FontAwesomeIcon icon="map-pin" style={{ marginRight: 8 }} />Local da Ocorrência
-                                </h4>
+                                </h3>
                                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                                     {TIPO_LOCAL_OPTS.map(l => (
                                         <div
@@ -724,7 +724,7 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
                                 </div>
                                 {formData.idTipoLocalOcorrencia === '5' && (
                                     <div className="form-group" style={{ marginTop: 10 }}>
-                                        <label>Descreva o local *</label>
+                                        <label htmlFor="localOcorrenciaOutro">Descreva o local *</label>
                                         <input
                                             type="text" id="localOcorrenciaOutro" maxLength={100}
                                             placeholder="Descreva o local da ocorrência..."
@@ -734,12 +734,12 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
                                 )}
 
                                 {/* Endereço */}
-                                <h4 className="section-header" style={{ marginTop: 24 }}>
+                                <h3 className="section-header" style={{ marginTop: 24 }}>
                                     <FontAwesomeIcon icon="search" style={{ marginRight: 8 }} />Endereço
-                                </h4>
+                                </h3>
                                 <div className="form-grid">
                                     <div className="form-group">
-                                        <label>CEP</label>
+                                        <label htmlFor="cep">CEP</label>
                                         <div style={{ display: 'flex', gap: 8 }}>
                                             <input
                                                 type="text" id="cep" placeholder="00000-000"
@@ -751,41 +751,41 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
                                                 }}
                                             />
                                             <button type="button" className="btn-secondary" style={{ padding: '0 12px' }}
-                                                onClick={() => fetchCep(formData.cep)} disabled={cepLoading}>
+                                                onClick={() => fetchCep(formData.cep)} disabled={cepLoading} aria-label="Buscar CEP">
                                                 <FontAwesomeIcon icon={cepLoading ? 'sync' : 'search'} spin={cepLoading} />
                                             </button>
                                         </div>
                                         {cepError && <span style={{ color: '#ef4444', fontSize: 12 }}>{cepError}</span>}
                                     </div>
                                     <div className="form-group">
-                                        <label>UF</label>
+                                        <label htmlFor="idUf">UF</label>
                                         <select id="idUf" value={formData.idUf} onChange={handleChange}>
                                             <option value="">— selecione —</option>
                                             {UF_OPTS.map(u => <option key={u.id} value={u.id}>{u.uf}</option>)}
                                         </select>
                                     </div>
                                     <div className="form-group" style={{ gridColumn: 'span 2' }}>
-                                        <label>Endereço / Logradouro</label>
+                                        <label htmlFor="endereco">Endereço / Logradouro</label>
                                         <input type="text" id="endereco" value={formData.endereco} onChange={handleChange} />
                                     </div>
                                     <div className="form-group">
-                                        <label>Número</label>
+                                        <label htmlFor="numero">Número</label>
                                         <input type="number" id="numero" value={formData.numero} onChange={handleChange} />
                                     </div>
                                     <div className="form-group">
-                                        <label>Complemento</label>
+                                        <label htmlFor="complemento">Complemento</label>
                                         <input type="text" id="complemento" placeholder="Apto, Bloco..." maxLength={25} value={formData.complemento} onChange={handleChange} />
                                     </div>
                                     <div className="form-group">
-                                        <label>Bairro</label>
+                                        <label htmlFor="bairro">Bairro</label>
                                         <input type="text" id="bairro" value={formData.bairro} onChange={handleChange} />
                                     </div>
                                     <div className="form-group">
-                                        <label>Cidade</label>
+                                        <label htmlFor="cidade">Cidade</label>
                                         <input type="text" id="cidade" value={formData.cidade} onChange={handleChange} />
                                     </div>
                                     <div className="form-group" style={{ gridColumn: 'span 2' }}>
-                                        <label>Ponto de Referência</label>
+                                        <label htmlFor="ponto_referencia">Ponto de Referência</label>
                                         <input type="text" id="ponto_referencia" placeholder="Próximo ao mercado..." value={formData.ponto_referencia} onChange={handleChange} />
                                     </div>
                                 </div>
@@ -808,9 +808,9 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
                                 <div style={{ marginBottom: 20, paddingBottom: 20, borderBottom: '1px solid #e2e8f0' }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
                                         <div>
-                                            <h4 style={{ margin: 0 }}>
+                                            <h3 style={{ margin: 0, fontSize: '1rem' }}>
                                                 <FontAwesomeIcon icon="car" style={{ marginRight: 8, color: '#0891b2' }} />Veículos Envolvidos
-                                            </h4>
+                                            </h3>
                                             <p style={{ fontSize: 12, color: '#64748b', margin: '4px 0 0' }}>Opcional — registre os veículos envolvidos na ocorrência.</p>
                                         </div>
                                         <button type="button" className="btn btn-secondary" style={{ fontSize: 13, padding: '8px 16px' }} onClick={addVeiculo}>
@@ -822,20 +822,20 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
                                             {veiculos.map((vei, idx) => (
                                                 <div key={vei.uid} style={{ display: 'grid', gridTemplateColumns: '1.2fr 1.5fr 1fr 1fr auto', gap: 8, alignItems: 'end', background: '#f0f9ff', borderRadius: 8, padding: '12px 16px', border: '1px solid #bae6fd' }}>
                                                     <div className="form-group" style={{ margin: 0 }}>
-                                                        <label style={{ fontSize: 12 }}>Veículo {idx + 1} — Tipo *</label>
-                                                        <select value={vei.idTipoVeiculo} onChange={e => updateVeiculo(vei.uid, 'idTipoVeiculo', e.target.value)}>
+                                                        <label htmlFor={`veiculo-${vei.uid}-tipo`} style={{ fontSize: 12 }}>Veículo {idx + 1} — Tipo *</label>
+                                                        <select id={`veiculo-${vei.uid}-tipo`} value={vei.idTipoVeiculo} onChange={e => updateVeiculo(vei.uid, 'idTipoVeiculo', e.target.value)}>
                                                             <option value="">— selecione —</option>
                                                             {TIPO_VEICULO_OPTS.map(t => <option key={t.id} value={t.id}>{t.label}</option>)}
                                                         </select>
                                                     </div>
                                                     <div className="form-group" style={{ margin: 0 }}>
-                                                        <label style={{ fontSize: 12 }}>Descrição</label>
-                                                        <input type="text" maxLength={255} placeholder="Ex: Fiat Uno branco"
+                                                        <label htmlFor={`veiculo-${vei.uid}-descricao`} style={{ fontSize: 12 }}>Descrição</label>
+                                                        <input type="text" id={`veiculo-${vei.uid}-descricao`} maxLength={255} placeholder="Ex: Fiat Uno branco"
                                                             value={vei.descricao} onChange={e => updateVeiculo(vei.uid, 'descricao', e.target.value)} />
                                                     </div>
                                                     <div className="form-group" style={{ margin: 0, position: 'relative' }}>
-                                                        <label style={{ fontSize: 12 }}>Placa</label>
-                                                        <input type="text" maxLength={8} placeholder="Ex: ABC-1234"
+                                                        <label htmlFor={`veiculo-${vei.uid}-placa`} style={{ fontSize: 12 }}>Placa</label>
+                                                        <input type="text" id={`veiculo-${vei.uid}-placa`} maxLength={8} placeholder="Ex: ABC-1234"
                                                             value={vei.placa}
                                                             onChange={e => updateVeiculo(vei.uid, 'placa', formatPlaca(e.target.value))} />
                                                         {vei.placa && !isValidPlaca(vei.placa) && (
@@ -845,11 +845,11 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
                                                         )}
                                                     </div>
                                                     <div className="form-group" style={{ margin: 0 }}>
-                                                        <label style={{ fontSize: 12 }}>Cor</label>
-                                                        <input type="text" maxLength={30} placeholder="Ex: Prata"
+                                                        <label htmlFor={`veiculo-${vei.uid}-cor`} style={{ fontSize: 12 }}>Cor</label>
+                                                        <input type="text" id={`veiculo-${vei.uid}-cor`} maxLength={30} placeholder="Ex: Prata"
                                                             value={vei.cor} onChange={e => updateVeiculo(vei.uid, 'cor', e.target.value)} />
                                                     </div>
-                                                    <button type="button" onClick={() => removeVeiculo(vei.uid)}
+                                                    <button type="button" onClick={() => removeVeiculo(vei.uid)} aria-label="Remover veículo"
                                                         style={{ background: 'none', border: '1px solid #fecaca', color: '#dc2626', borderRadius: 6, padding: '8px 12px', cursor: 'pointer', marginBottom: 0, alignSelf: 'end' }}>
                                                         <FontAwesomeIcon icon="trash" />
                                                     </button>
@@ -861,7 +861,7 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
 
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
                                     <div>
-                                        <h4 style={{ margin: 0 }}>Vítimas</h4>
+                                        <h3 style={{ margin: 0, fontSize: '1rem' }}>Vítimas</h3>
                                         <p style={{ fontSize: 12, color: '#64748b', margin: '4px 0 0' }}>
                                             {selectedBoType === 'simplificado' ? 'Opcional — adicione se houver vítimas.' : 'Adicione todas as vítimas do atendimento.'}
                                         </p>
@@ -872,7 +872,7 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
                                 </div>
 
                                 {vitimas.length === 0 && (
-                                    <div style={{ textAlign: 'center', padding: '40px 24px', border: '2px dashed #e2e8f0', borderRadius: 10, color: '#94a3b8' }}>
+                                    <div style={{ textAlign: 'center', padding: '40px 24px', border: '2px dashed #e2e8f0', borderRadius: 10, color: '#64748b' }}>
                                         <FontAwesomeIcon icon="user" style={{ fontSize: 32, marginBottom: 12, display: 'block' }} />
                                         <p style={{ margin: 0, fontWeight: 600 }}>Nenhuma vítima cadastrada</p>
                                         <p style={{ margin: '4px 0 0', fontSize: 12 }}>Clique em "Adicionar Vítima" acima para registrar.</p>
@@ -900,7 +900,7 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
                                                 </div>
                                                 <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                                                     {glasgow && <span style={{ fontSize: 11, background: '#fef3c7', color: '#92400e', borderRadius: 20, padding: '2px 10px', fontWeight: 700 }}>Glasgow: {glasgow}</span>}
-                                                    <button type="button" onClick={(e) => { e.stopPropagation(); removeVitima(v.uid); }}
+                                                    <button type="button" onClick={(e) => { e.stopPropagation(); removeVitima(v.uid); }} aria-label="Remover vítima"
                                                         style={{ background: 'none', border: '1px solid #fecaca', color: '#dc2626', borderRadius: 6, padding: '4px 10px', cursor: 'pointer', fontSize: 12 }}>
                                                         <FontAwesomeIcon icon="trash" />
                                                     </button>
@@ -913,36 +913,36 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
                                                 <div style={{ padding: '20px' }}>
 
                                                     {/* Dados pessoais */}
-                                                    <h4 className="section-header"><FontAwesomeIcon icon="user" style={{ marginRight: 8 }} />Dados Pessoais</h4>
+                                                    <h3 className="section-header"><FontAwesomeIcon icon="user" style={{ marginRight: 8 }} />Dados Pessoais</h3>
                                                     <div className="form-grid">
                                                         <div className="form-group">
-                                                            <label>CPF *</label>
-                                                            <input type="text" placeholder="000.000.000-00" maxLength={14} value={v.cpf}
+                                                            <label htmlFor={`vitima-${v.uid}-cpf`}>CPF *</label>
+                                                            <input type="text" id={`vitima-${v.uid}-cpf`} placeholder="000.000.000-00" maxLength={14} value={v.cpf}
                                                                 onChange={e => updateVitima(v.uid, 'cpf', formatCpf(e.target.value))} required />
                                                         </div>
                                                         <div className="form-group">
-                                                            <label>Nome Completo *</label>
-                                                            <input type="text" value={v.nome}
+                                                            <label htmlFor={`vitima-${v.uid}-nome`}>Nome Completo *</label>
+                                                            <input type="text" id={`vitima-${v.uid}-nome`} value={v.nome}
                                                                 onChange={e => updateVitima(v.uid, 'nome', e.target.value)} required />
                                                         </div>
                                                         <div className="form-group">
-                                                            <label>Nome Social</label>
-                                                            <input type="text" value={v.nomeSocial}
+                                                            <label htmlFor={`vitima-${v.uid}-nomeSocial`}>Nome Social</label>
+                                                            <input type="text" id={`vitima-${v.uid}-nomeSocial`} value={v.nomeSocial}
                                                                 onChange={e => updateVitima(v.uid, 'nomeSocial', e.target.value)} />
                                                         </div>
                                                         <div className="form-group">
-                                                            <label>Data de Nascimento *</label>
-                                                            <input type="date" value={v.nascimento}
+                                                            <label htmlFor={`vitima-${v.uid}-nascimento`}>Data de Nascimento *</label>
+                                                            <input type="date" id={`vitima-${v.uid}-nascimento`} value={v.nascimento}
                                                                 onChange={e => updateVitima(v.uid, 'nascimento', e.target.value)} required />
                                                         </div>
                                                         <div className="form-group">
-                                                            <label>Telefone</label>
-                                                            <input type="tel" placeholder="(00) 00000-0000" maxLength={15} value={v.telefone}
+                                                            <label htmlFor={`vitima-${v.uid}-telefone`}>Telefone</label>
+                                                            <input type="tel" id={`vitima-${v.uid}-telefone`} placeholder="(00) 00000-0000" maxLength={15} value={v.telefone}
                                                                 onChange={e => updateVitima(v.uid, 'telefone', formatCelular(e.target.value))} />
                                                         </div>
                                                         <div className="form-group">
-                                                            <label>Nome da Mãe</label>
-                                                            <input type="text" value={v.nomeMae}
+                                                            <label htmlFor={`vitima-${v.uid}-nomeMae`}>Nome da Mãe</label>
+                                                            <input type="text" id={`vitima-${v.uid}-nomeMae`} value={v.nomeMae}
                                                                 onChange={e => updateVitima(v.uid, 'nomeMae', e.target.value)} />
                                                         </div>
                                                         <div className="form-group full-width">
@@ -963,11 +963,11 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
                                                     {/* Vínculo com veículo */}
                                                     {veiculos.length > 0 && (
                                                         <div className="form-group" style={{ marginTop: 12 }}>
-                                                            <label>
+                                                            <label htmlFor={`vitima-${v.uid}-veiculo`}>
                                                                 <FontAwesomeIcon icon="car" style={{ marginRight: 6, color: '#0891b2' }} />
                                                                 Veículo de Origem
                                                             </label>
-                                                            <select value={v.idVeiculoUid}
+                                                            <select id={`vitima-${v.uid}-veiculo`} value={v.idVeiculoUid}
                                                                 onChange={e => updateVitima(v.uid, 'idVeiculoUid', e.target.value)}>
                                                                 <option value="">— não vinculado —</option>
                                                                 {veiculos.map((vei, vIdx) => (
@@ -982,76 +982,76 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
                                                     {/* Avaliação clínica — apenas Salvamento/Resgate e Incêndio */}
                                                     {selectedBoType !== 'simplificado' && (<>
                                                     {/* Sinais Vitais */}
-                                                    <h4 className="section-header" style={{ marginTop: 20 }}>
+                                                    <h3 className="section-header" style={{ marginTop: 20 }}>
                                                         <FontAwesomeIcon icon="stethoscope" style={{ marginRight: 8, color: '#ef4444' }} />Sinais Vitais
-                                                    </h4>
+                                                    </h3>
                                                     <div className="form-grid">
                                                         <div className="form-group">
                                                             <label><FontAwesomeIcon icon="stethoscope" style={{ marginRight: 4, color: '#ef4444' }} /> Pressão Arterial (mmHg)</label>
                                                             <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #e2e8f0', borderRadius: 8, overflow: 'hidden' }}>
-                                                                <input type="number" placeholder="PAS" value={v.pas}
+                                                                <input type="number" placeholder="PAS" aria-label="Pressão Arterial Sistólica" value={v.pas}
                                                                     onChange={e => updateVitima(v.uid, 'pas', e.target.value)}
                                                                     style={{ border: 'none', textAlign: 'center', flex: 1, padding: '10px 8px' }} />
                                                                 <span style={{ color: '#94a3b8', fontWeight: 'bold', padding: '0 4px' }}>/</span>
-                                                                <input type="number" placeholder="PAD" value={v.pad}
+                                                                <input type="number" placeholder="PAD" aria-label="Pressão Arterial Diastólica" value={v.pad}
                                                                     onChange={e => updateVitima(v.uid, 'pad', e.target.value)}
                                                                     style={{ border: 'none', textAlign: 'center', flex: 1, padding: '10px 8px' }} />
                                                             </div>
                                                         </div>
                                                         <div className="form-group">
-                                                            <label><FontAwesomeIcon icon="heart-pulse" style={{ marginRight: 4, color: '#ef4444' }} /> Pulso (bpm)</label>
-                                                            <input type="number" placeholder="Ex: 72" value={v.pulso}
+                                                            <label htmlFor={`vitima-${v.uid}-pulso`}><FontAwesomeIcon icon="heart-pulse" style={{ marginRight: 4, color: '#ef4444' }} /> Pulso (bpm)</label>
+                                                            <input type="number" id={`vitima-${v.uid}-pulso`} placeholder="Ex: 72" value={v.pulso}
                                                                 onChange={e => updateVitima(v.uid, 'pulso', e.target.value)} />
                                                         </div>
                                                         <div className="form-group">
-                                                            <label><FontAwesomeIcon icon="wind" style={{ marginRight: 4, color: '#3b82f6' }} /> Respiração (irpm)</label>
-                                                            <input type="number" placeholder="Ex: 16" value={v.respiracao}
+                                                            <label htmlFor={`vitima-${v.uid}-respiracao`}><FontAwesomeIcon icon="wind" style={{ marginRight: 4, color: '#3b82f6' }} /> Respiração (irpm)</label>
+                                                            <input type="number" id={`vitima-${v.uid}-respiracao`} placeholder="Ex: 16" value={v.respiracao}
                                                                 onChange={e => updateVitima(v.uid, 'respiracao', e.target.value)} />
                                                         </div>
                                                         <div className="form-group">
-                                                            <label><FontAwesomeIcon icon="temperature-high" style={{ marginRight: 4, color: '#f59e0b' }} /> Temperatura (°C)</label>
-                                                            <input type="number" step="0.1" placeholder="Ex: 36.5" value={v.temperatura}
+                                                            <label htmlFor={`vitima-${v.uid}-temperatura`}><FontAwesomeIcon icon="temperature-high" style={{ marginRight: 4, color: '#f59e0b' }} /> Temperatura (°C)</label>
+                                                            <input type="number" id={`vitima-${v.uid}-temperatura`} step="0.1" placeholder="Ex: 36.5" value={v.temperatura}
                                                                 onChange={e => updateVitima(v.uid, 'temperatura', e.target.value)} />
                                                         </div>
                                                         <div className="form-group">
-                                                            <label><FontAwesomeIcon icon="tint" style={{ marginRight: 4, color: '#3b82f6' }} /> Saturação (%)</label>
-                                                            <input type="number" placeholder="Ex: 98" min={0} max={100} value={v.saturacao}
+                                                            <label htmlFor={`vitima-${v.uid}-saturacao`}><FontAwesomeIcon icon="tint" style={{ marginRight: 4, color: '#3b82f6' }} /> Saturação (%)</label>
+                                                            <input type="number" id={`vitima-${v.uid}-saturacao`} placeholder="Ex: 98" min={0} max={100} value={v.saturacao}
                                                                 onChange={e => updateVitima(v.uid, 'saturacao', e.target.value)} />
                                                         </div>
                                                         <div className="form-group">
-                                                            <label>Saturação c/ O₂ (L/min)</label>
-                                                            <input type="number" placeholder="Ex: 4" value={v.saturacaoOxigenio}
+                                                            <label htmlFor={`vitima-${v.uid}-saturacaoO2`}>Saturação c/ O₂ (L/min)</label>
+                                                            <input type="number" id={`vitima-${v.uid}-saturacaoO2`} placeholder="Ex: 4" value={v.saturacaoOxigenio}
                                                                 onChange={e => updateVitima(v.uid, 'saturacaoOxigenio', e.target.value)} />
                                                         </div>
                                                     </div>
 
                                                     {/* Glasgow */}
-                                                    <h4 className="section-header" style={{ marginTop: 20 }}>
+                                                    <h3 className="section-header" style={{ marginTop: 20 }}>
                                                         Escala de Glasgow
                                                         {calcGlasgow(v) !== null && (
                                                             <span style={{ marginLeft: 12, background: '#fef3c7', color: '#92400e', borderRadius: 20, padding: '2px 12px', fontSize: 12, fontWeight: 700 }}>
                                                                 Total: {calcGlasgow(v)} / 15
                                                             </span>
                                                         )}
-                                                    </h4>
+                                                    </h3>
                                                     <div className="form-grid">
                                                         <div className="form-group">
-                                                            <label>Abertura Ocular (O)</label>
-                                                            <select value={v.idAberturaOcular} onChange={e => updateVitima(v.uid, 'idAberturaOcular', e.target.value)}>
+                                                            <label htmlFor={`vitima-${v.uid}-abertura`}>Abertura Ocular (O)</label>
+                                                            <select id={`vitima-${v.uid}-abertura`} value={v.idAberturaOcular} onChange={e => updateVitima(v.uid, 'idAberturaOcular', e.target.value)}>
                                                                 <option value="">— selecione —</option>
                                                                 {ABERTURA_OCULAR.map(x => <option key={x.id} value={x.id}>{x.label}</option>)}
                                                             </select>
                                                         </div>
                                                         <div className="form-group">
-                                                            <label>Resposta Verbal (V)</label>
-                                                            <select value={v.idRespostaVerbal} onChange={e => updateVitima(v.uid, 'idRespostaVerbal', e.target.value)}>
+                                                            <label htmlFor={`vitima-${v.uid}-verbal`}>Resposta Verbal (V)</label>
+                                                            <select id={`vitima-${v.uid}-verbal`} value={v.idRespostaVerbal} onChange={e => updateVitima(v.uid, 'idRespostaVerbal', e.target.value)}>
                                                                 <option value="">— selecione —</option>
                                                                 {RESPOSTA_VERBAL.map(x => <option key={x.id} value={x.id}>{x.label}</option>)}
                                                             </select>
                                                         </div>
                                                         <div className="form-group">
-                                                            <label>Resposta Motora (M)</label>
-                                                            <select value={v.idRespostaMotora} onChange={e => updateVitima(v.uid, 'idRespostaMotora', e.target.value)}>
+                                                            <label htmlFor={`vitima-${v.uid}-motora`}>Resposta Motora (M)</label>
+                                                            <select id={`vitima-${v.uid}-motora`} value={v.idRespostaMotora} onChange={e => updateVitima(v.uid, 'idRespostaMotora', e.target.value)}>
                                                                 <option value="">— selecione —</option>
                                                                 {RESPOSTA_MOTORA.map(x => <option key={x.id} value={x.id}>{x.label}</option>)}
                                                             </select>
@@ -1059,7 +1059,7 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
                                                     </div>
 
                                                     {/* Traumas */}
-                                                    <h4 className="section-header" style={{ marginTop: 20 }}>🩹 Traumas</h4>
+                                                    <h3 className="section-header" style={{ marginTop: 20 }}>🩹 Traumas</h3>
                                                     <div className="toggle-card-grid">
                                                         {TRAUMAS.map(t => (
                                                             <div key={t.id}
@@ -1072,15 +1072,15 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
                                                     </div>
                                                     {v.traumas.includes(17) && (
                                                         <div className="form-group" style={{ marginTop: 10 }}>
-                                                            <label>Descreva o trauma *</label>
-                                                            <input type="text" maxLength={100} placeholder="Descreva o trauma..."
+                                                            <label htmlFor={`vitima-${v.uid}-traumaOutro`}>Descreva o trauma *</label>
+                                                            <input type="text" id={`vitima-${v.uid}-traumaOutro`} maxLength={100} placeholder="Descreva o trauma..."
                                                                 value={v.traumaOutro}
                                                                 onChange={e => updateVitima(v.uid, 'traumaOutro', e.target.value)} />
                                                         </div>
                                                     )}
 
                                                     {/* Emergências */}
-                                                    <h4 className="section-header" style={{ marginTop: 20 }}>⚡ Emergências Clínicas</h4>
+                                                    <h3 className="section-header" style={{ marginTop: 20 }}>⚡ Emergências Clínicas</h3>
                                                     <div className="toggle-card-grid">
                                                         {EMERGENCIAS.map(e => (
                                                             <div key={e.id}
@@ -1094,15 +1094,15 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
                                                     </div>
                                                     {v.emergencias.includes(14) && (
                                                         <div className="form-group" style={{ marginTop: 10 }}>
-                                                            <label>Descreva a emergência *</label>
-                                                            <input type="text" maxLength={100} placeholder="Descreva a emergência..."
+                                                            <label htmlFor={`vitima-${v.uid}-emergenciaOutro`}>Descreva a emergência *</label>
+                                                            <input type="text" id={`vitima-${v.uid}-emergenciaOutro`} maxLength={100} placeholder="Descreva a emergência..."
                                                                 value={v.emergenciaOutro}
                                                                 onChange={e => updateVitima(v.uid, 'emergenciaOutro', e.target.value)} />
                                                         </div>
                                                     )}
 
                                                     {/* Procedimentos */}
-                                                    <h4 className="section-header" style={{ marginTop: 20 }}>🔧 Procedimentos Efetuados</h4>
+                                                    <h3 className="section-header" style={{ marginTop: 20 }}>🔧 Procedimentos Efetuados</h3>
                                                     <div className="toggle-card-grid">
                                                         {PROCEDIMENTOS.map(p => (
                                                             <div key={p.id}
@@ -1116,8 +1116,8 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
                                                     </div>
                                                     {v.procedimentos.includes(17) && (
                                                         <div className="form-group" style={{ marginTop: 10 }}>
-                                                            <label>Descreva o procedimento *</label>
-                                                            <input type="text" maxLength={100} placeholder="Descreva o procedimento..."
+                                                            <label htmlFor={`vitima-${v.uid}-procedimentoOutro`}>Descreva o procedimento *</label>
+                                                            <input type="text" id={`vitima-${v.uid}-procedimentoOutro`} maxLength={100} placeholder="Descreva o procedimento..."
                                                                 value={v.procedimentoOutro}
                                                                 onChange={e => updateVitima(v.uid, 'procedimentoOutro', e.target.value)} />
                                                         </div>
@@ -1125,9 +1125,9 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
                                                     </>)}
 
                                                     {/* Destino da vítima */}
-                                                    <h4 className="section-header" style={{ marginTop: 20 }}>
+                                                    <h3 className="section-header" style={{ marginTop: 20 }}>
                                                         <FontAwesomeIcon icon="route" style={{ marginRight: 8, color: '#0891b2' }} />Destino da Vítima
-                                                    </h4>
+                                                    </h3>
                                                     <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                                                         {TIPO_DESTINO_OPTS.map(d => (
                                                             <div
@@ -1169,8 +1169,8 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
                                                                     </div>
                                                                 </div>
                                                                 <div className="form-group">
-                                                                    <label>Prefixo / Placa</label>
-                                                                    <input type="text" maxLength={8} placeholder="Ex: ABC-1234"
+                                                                    <label htmlFor={`vitima-${v.uid}-prefixoPlaca`}>Prefixo / Placa</label>
+                                                                    <input type="text" id={`vitima-${v.uid}-prefixoPlaca`} maxLength={8} placeholder="Ex: ABC-1234"
                                                                         value={v.prefixoPlaca}
                                                                         onChange={e => updateVitima(v.uid, 'prefixoPlaca', formatPlaca(e.target.value))} />
                                                                     {v.prefixoPlaca && !isValidPlaca(v.prefixoPlaca) && (
@@ -1180,8 +1180,8 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
                                                                     )}
                                                                 </div>
                                                                 <div className="form-group">
-                                                                    <label>Hospital de Destino</label>
-                                                                    <select value={v.idHospital}
+                                                                    <label htmlFor={`vitima-${v.uid}-hospital`}>Hospital de Destino</label>
+                                                                    <select id={`vitima-${v.uid}-hospital`} value={v.idHospital}
                                                                         onChange={e => updateVitima(v.uid, 'idHospital', e.target.value)}>
                                                                         <option value="">— selecione —</option>
                                                                         {hospitais.map(h => (
@@ -1190,20 +1190,20 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
                                                                     </select>
                                                                 </div>
                                                                 <div className="form-group">
-                                                                    <label>Nº Prontuário</label>
-                                                                    <input type="text" maxLength={50} placeholder="Ex: 2024-00123"
+                                                                    <label htmlFor={`vitima-${v.uid}-prontuario`}>Nº Prontuário</label>
+                                                                    <input type="text" id={`vitima-${v.uid}-prontuario`} maxLength={50} placeholder="Ex: 2024-00123"
                                                                         value={v.numeroProntuario}
                                                                         onChange={e => updateVitima(v.uid, 'numeroProntuario', e.target.value)} />
                                                                 </div>
                                                                 <div className="form-group">
-                                                                    <label>Nome do Médico Receptor</label>
-                                                                    <input type="text" placeholder="Dr(a). Nome completo"
+                                                                    <label htmlFor={`vitima-${v.uid}-medico`}>Nome do Médico Receptor</label>
+                                                                    <input type="text" id={`vitima-${v.uid}-medico`} placeholder="Dr(a). Nome completo"
                                                                         value={v.nomeMedicoReceptor}
                                                                         onChange={e => updateVitima(v.uid, 'nomeMedicoReceptor', e.target.value)} />
                                                                 </div>
                                                                 <div className="form-group">
-                                                                    <label>CRM</label>
-                                                                    <input type="text" maxLength={25} placeholder="Ex: MG-123456"
+                                                                    <label htmlFor={`vitima-${v.uid}-crm`}>CRM</label>
+                                                                    <input type="text" id={`vitima-${v.uid}-crm`} maxLength={25} placeholder="Ex: MG-123456"
                                                                         value={v.crm}
                                                                         onChange={e => updateVitima(v.uid, 'crm', e.target.value)} />
                                                                 </div>
@@ -1218,8 +1218,8 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
                                                                 <FontAwesomeIcon icon="file-signature" style={{ marginRight: 8 }} />Termo de Recusa
                                                             </h4>
                                                             <div className="form-group" style={{ margin: 0 }}>
-                                                                <label style={{ fontSize: 12 }}>Anexar arquivo do termo de recusa (PDF, imagem)</label>
-                                                                <input type="file" accept=".pdf,.jpg,.jpeg,.png"
+                                                                <label htmlFor={`vitima-${v.uid}-recusa`} style={{ fontSize: 12 }}>Anexar arquivo do termo de recusa (PDF, imagem)</label>
+                                                                <input type="file" id={`vitima-${v.uid}-recusa`} accept=".pdf,.jpg,.jpeg,.png"
                                                                     onChange={e => updateVitima(v.uid, 'caminhoArquivoRecusa', e.target.files?.[0]?.name ?? '')}
                                                                     style={{ border: '2px dashed #fed7aa', borderRadius: 8, padding: 10, width: '100%', cursor: 'pointer', background: '#fffbf5' }} />
                                                                 {v.caminhoArquivoRecusa && (
@@ -1254,9 +1254,9 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
 
                                     {/* Equipe de Plantão */}
                                     <div className="form-group full-width">
-                                        <h4 style={{ margin: '0 0 12px', borderBottom: '1px solid #e2e8f0', paddingBottom: 8 }}>
+                                        <h3 style={{ margin: '0 0 12px', borderBottom: '1px solid #e2e8f0', paddingBottom: 8, fontSize: '1rem' }}>
                                             <FontAwesomeIcon icon="users" style={{ marginRight: 8 }} /> Equipe de Plantão
-                                        </h4>
+                                        </h3>
                                         {usuariosLoading ? (
                                             <p style={{ fontSize: 13, color: '#64748b', margin: 0 }}>
                                                 <FontAwesomeIcon icon="sync" spin style={{ marginRight: 6 }} />Carregando equipe...
@@ -1264,7 +1264,7 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
                                         ) : usuariosError ? (
                                             <p style={{ fontSize: 13, color: '#ef4444', margin: 0 }}>{usuariosError}</p>
                                         ) : usuarios.length === 0 ? (
-                                            <p style={{ fontSize: 13, color: '#94a3b8', margin: 0 }}>Nenhum usuário encontrado para esta corporação.</p>
+                                            <p style={{ fontSize: 13, color: '#64748b', margin: 0 }}>Nenhum usuário encontrado para esta corporação.</p>
                                         ) : (
                                             <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                                                 {usuarios.map(u => {
@@ -1287,17 +1287,17 @@ const NovaOcorrenciaModal = ({ isOpen, onClose, onSaved, idCorporacao, idRespons
                                     </div>
 
                                     <div className="form-group full-width">
-                                        <h4 style={{ margin: '0 0 12px', borderBottom: '1px solid #e2e8f0', paddingBottom: 8 }}>
+                                        <h3 style={{ margin: '0 0 12px', borderBottom: '1px solid #e2e8f0', paddingBottom: 8, fontSize: '1rem' }}>
                                             <FontAwesomeIcon icon="camera" style={{ marginRight: 8 }} /> Fotos da Ocorrência
-                                        </h4>
-                                        <input type="file" multiple accept="image/*"
+                                        </h3>
+                                        <input type="file" multiple accept="image/*" aria-label="Fotos da Ocorrência"
                                             style={{ border: '2px dashed #e2e8f0', borderRadius: 8, padding: 12, width: '100%', cursor: 'pointer' }} />
-                                        <span style={{ fontSize: 11, color: '#94a3b8', display: 'block', marginTop: 4 }}>Múltiplas fotos permitidas. JPG, PNG, WEBP.</span>
+                                        <span style={{ fontSize: 11, color: '#64748b', display: 'block', marginTop: 4 }}>Múltiplas fotos permitidas. JPG, PNG, WEBP.</span>
                                     </div>
 
                                     {/* Resumo */}
                                     <div className="form-group full-width" style={{ background: '#f8fafc', borderRadius: 8, padding: 16, border: '1px solid #e2e8f0' }}>
-                                        <h4 style={{ margin: '0 0 12px', fontSize: 13, color: '#64748b' }}>📋 Resumo</h4>
+                                        <h3 style={{ margin: '0 0 12px', fontSize: 13, color: '#64748b' }}>📋 Resumo</h3>
                                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, fontSize: 13 }}>
                                             <div><strong>Tipo:</strong> {selectedBoType || '—'}</div>
                                             <div><strong>Data:</strong> {formData.data_ocorrencia || '—'}</div>

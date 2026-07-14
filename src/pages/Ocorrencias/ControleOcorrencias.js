@@ -279,70 +279,72 @@ const EditOcorrenciaModal = ({ ocorrencia, onClose, onSaved }) => {
             <p className="perfis-list__label" style={{ marginBottom: 8 }}>TIPO E DATA</p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               <div className="form-field">
-                <label>Tipo de Ocorrência</label>
-                <select value={form.idTipoOcorrencia} onChange={set('idTipoOcorrencia')} disabled={saving}>
+                <label htmlFor="edit-tipoOcorrencia">Tipo de Ocorrência</label>
+                <select id="edit-tipoOcorrencia" value={form.idTipoOcorrencia} onChange={set('idTipoOcorrencia')} disabled={saving}>
                   <option value="1">Simplificado</option>
                   <option value="2">Incêndio</option>
                   <option value="3">Resgate / Salvamento</option>
                 </select>
               </div>
               <div className="form-field">
-                <label>Data da Ocorrência *</label>
-                <input type="date" value={form.dataOcorrencia} onChange={set('dataOcorrencia')} disabled={saving} />
+                <label htmlFor="edit-dataOcorrencia">Data da Ocorrência *</label>
+                <input type="date" id="edit-dataOcorrencia" value={form.dataOcorrencia} onChange={set('dataOcorrencia')} disabled={saving} />
               </div>
             </div>
 
             <p className="perfis-list__label" style={{ marginTop: 16, marginBottom: 8 }}>HORÁRIOS</p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px' }}>
               <div className="form-field">
-                <label>Hora Transmissão</label>
-                <input type="time" value={form.horaTransmissao} onChange={set('horaTransmissao')} disabled={saving} />
+                <label htmlFor="edit-horaTransmissao">Hora Transmissão</label>
+                <input type="time" id="edit-horaTransmissao" value={form.horaTransmissao} onChange={set('horaTransmissao')} disabled={saving} />
               </div>
               <div className="form-field">
-                <label>Hora Chegada ao Local</label>
-                <input type="time" value={form.horaChegadaLocal} onChange={set('horaChegadaLocal')} disabled={saving} />
+                <label htmlFor="edit-horaChegadaLocal">Hora Chegada ao Local</label>
+                <input type="time" id="edit-horaChegadaLocal" value={form.horaChegadaLocal} onChange={set('horaChegadaLocal')} disabled={saving} />
               </div>
               <div className="form-field">
-                <label>Hora Chegada ao Hospital</label>
-                <input type="time" value={form.horaChegadaHospital} onChange={set('horaChegadaHospital')} disabled={saving} />
+                <label htmlFor="edit-horaChegadaHospital">Hora Chegada ao Hospital</label>
+                <input type="time" id="edit-horaChegadaHospital" value={form.horaChegadaHospital} onChange={set('horaChegadaHospital')} disabled={saving} />
               </div>
             </div>
 
             <p className="perfis-list__label" style={{ marginTop: 16, marginBottom: 8 }}>LOCAL DA OCORRÊNCIA</p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
               <div className="form-field" style={{ gridColumn: '1 / -1' }}>
-                <label>Endereço</label>
-                <input type="text" value={form.endereco} onChange={set('endereco')} disabled={saving} />
+                <label htmlFor="edit-endereco">Endereço</label>
+                <input type="text" id="edit-endereco" value={form.endereco} onChange={set('endereco')} disabled={saving} />
               </div>
               <div className="form-field">
-                <label>Número</label>
-                <input type="number" value={form.numero} onChange={set('numero')} disabled={saving} />
+                <label htmlFor="edit-numero">Número</label>
+                <input type="number" id="edit-numero" value={form.numero} onChange={set('numero')} disabled={saving} />
               </div>
               <div className="form-field">
-                <label>Complemento</label>
-                <input type="text" value={form.complemento} onChange={set('complemento')} placeholder="Apto, Bloco..." disabled={saving} />
+                <label htmlFor="edit-complemento">Complemento</label>
+                <input type="text" id="edit-complemento" value={form.complemento} onChange={set('complemento')} placeholder="Apto, Bloco..." disabled={saving} />
               </div>
               <div className="form-field">
-                <label>Bairro</label>
-                <input type="text" value={form.bairro} onChange={set('bairro')} disabled={saving} />
+                <label htmlFor="edit-bairro">Bairro</label>
+                <input type="text" id="edit-bairro" value={form.bairro} onChange={set('bairro')} disabled={saving} />
               </div>
               <div className="form-field">
-                <label>Cidade</label>
-                <input type="text" value={form.cidade} onChange={set('cidade')} disabled={saving} />
+                <label htmlFor="edit-cidade">Cidade</label>
+                <input type="text" id="edit-cidade" value={form.cidade} onChange={set('cidade')} disabled={saving} />
               </div>
               <div className="form-field">
-                <label>CEP</label>
-                <input type="text" value={form.cep} onChange={set('cep')} placeholder="00000-000" disabled={saving} />
+                <label htmlFor="edit-cep">CEP</label>
+                <input type="text" id="edit-cep" value={form.cep} onChange={set('cep')} placeholder="00000-000" disabled={saving} />
               </div>
               <div className="form-field">
-                <label>Ponto de Referência</label>
-                <input type="text" value={form.pontoReferencia} onChange={set('pontoReferencia')} disabled={saving} />
+                <label htmlFor="edit-pontoReferencia">Ponto de Referência</label>
+                <input type="text" id="edit-pontoReferencia" value={form.pontoReferencia} onChange={set('pontoReferencia')} disabled={saving} />
               </div>
             </div>
 
             <p className="perfis-list__label" style={{ marginTop: 16, marginBottom: 8 }}>RELATO FINAL</p>
             <div className="form-field">
+              <label htmlFor="edit-relatoFinal" style={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0 0 0 0)' }}>Relato Final</label>
               <textarea
+                id="edit-relatoFinal"
                 value={form.relatoFinal}
                 onChange={set('relatoFinal')}
                 rows={4}
@@ -595,12 +597,13 @@ const TabTodas = ({ data, loading, error, onView, onEdit, onDelete, onStatusClic
           <FontAwesomeIcon icon="search" />
           <input
             type="text"
+            aria-label="Buscar ocorrências"
             placeholder="Buscar por local, tipo, nome ou CPF da vítima..."
             value={search}
             onChange={e => onSearchChange(e.target.value)}
           />
         </div>
-        <select className="filter-select" value={filterTipo} onChange={e => onFilterTipoChange(e.target.value)}>
+        <select className="filter-select" aria-label="Filtrar por tipo de ocorrência" value={filterTipo} onChange={e => onFilterTipoChange(e.target.value)}>
           <option value="">Todos os Tipos</option>
           <option value="1">Simplificado</option>
           <option value="2">Incêndio</option>
